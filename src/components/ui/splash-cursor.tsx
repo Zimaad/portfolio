@@ -2,7 +2,6 @@
 import { useEffect, useRef } from "react";
 
 function SplashCursor({
-  // Optimized defaults for better performance
   SIM_RESOLUTION = 64,
   DYE_RESOLUTION = 256,
   CAPTURE_RESOLUTION = 256,
