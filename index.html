@@ -1,111 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Zimaad Azhari | Portfolio</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto&display=swap" rel="stylesheet">
-
-    <!-- AOS (Scroll Animations) -->
-    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
-
-    <!-- Typed.js -->
-    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-</head>
-<body>
-
-    <!-- HEADER -->
-    <header data-aos="fade-down">
-        <div class="logo">Zimaad Azhari</div>
-        <nav>
-            <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <!-- HERO -->
-    <section id="home" class="hero">
-        <div id="particles-js"></div>
-        <div class="hero-content" data-aos="zoom-in">
-            <h1>Hi, I'm <span class="highlight">Zimaad</span></h1>
-            <h2><span id="typed"></span></h2>
-            <p class="scroll-down">▼ Scroll Down ▼</p>
-        </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about" data-aos="fade-up">
-        <h2>About Me</h2>
-        <div class="about-content">
-            <img src="images/profile.jpg" alt="Profile Picture">
-            <p>
-                I'm a Computer Science & Data Science enthusiast with a passion for building cool and functional projects. 
-                I enjoy working with AI, web development, and solving challenging problems.
-            </p>
-            <a href="#" class="btn">Download Resume</a>
-        </div>
-    </section>
-
-    <!-- PROJECTS -->
-    <section id="projects" data-aos="fade-up">
-        <h2>Projects</h2>
-        <div class="project-grid">
-            <div class="project-card" data-aos="flip-left">
-                <img src="images/project1.png" alt="Project 1">
-                <h3>Flight Dashboard</h3>
-                <p>Interactive dashboard for aviation analytics using real-world datasets.</p>
-            </div>
-            <div class="project-card" data-aos="flip-right">
-                <img src="images/project2.png" alt="Project 2">
-                <h3>Lost & Found Website</h3>
-                <p>React & Firebase-based portal for reporting and finding lost items.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- SKILLS -->
-    <section id="skills" data-aos="fade-up">
-        <h2>Skills</h2>
-        <div class="skills-grid">
-            <div class="skill" data-aos="zoom-in">HTML</div>
-            <div class="skill" data-aos="zoom-in">CSS</div>
-            <div class="skill" data-aos="zoom-in">JavaScript</div>
-            <div class="skill" data-aos="zoom-in">Python</div>
-            <div class="skill" data-aos="zoom-in">React</div>
-            <div class="skill" data-aos="zoom-in">Data Science</div>
-        </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" data-aos="fade-up">
-        <h2>Contact Me</h2>
-        <form>
-            <input type="text" placeholder="Your Name" required>
-            <input type="email" placeholder="Your Email" required>
-            <textarea placeholder="Your Message" required></textarea>
-            <button type="submit" class="btn">Send Message</button>
-        </form>
-        <div class="social-links" data-aos="fade-up">
-            <a href="#">GitHub</a>
-            <a href="#">LinkedIn</a>
-        </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer data-aos="fade-up">
-        <p>© 2025 Zimaad Azhari. All rights reserved.</p>
-    </footer>
-
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-    <script src="js/script.js"></script>
-</body>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
+
+
