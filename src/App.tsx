@@ -81,19 +81,136 @@ function App() {
     }
     
     // Start obsession animation after typing finishes (name takes ~1.6s + 0.8s delay + 1.5s cursor = 3.9s)
-    // Add a small delay to ensure the first word also gets the fade-in animation
     const startTimeout = setTimeout(() => {
-      // Initialize the first word with proper animation state
+      // Ensure the container is properly initialized before starting animation
       if (obsessionWordsElement.current) {
+        // Set initial state for the first word
         obsessionWordsElement.current.style.transform = 'translateY(-100%)';
         obsessionWordsElement.current.style.opacity = '0';
+        obsessionWordsElement.current.textContent = ''; // Clear any initial content
       }
-      obsessionDropAnimation();
+      
+      // Small delay to ensure the initial state is applied
+      setTimeout(() => {
+        obsessionDropAnimation();
+      }, 100);
     }, 4000);
     
     return () => {
       clearTimeout(startTimeout);
       clearTimeout(animationTimeout);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Optimized shell typing animation - runs only once
+    const typingLines = document.querySelectorAll('.typing-line');
+    let currentLineIndex = 0;
+    let animationFrameId: number;
+    let timeoutId: NodeJS.Timeout;
+    let isAnimating = false;
+    let hasAnimated = false;
+    
+    function skipAnimation() {
+      console.log('Skip animation clicked!'); // Debug log
+      
+      // Stop all animations immediately
+      isAnimating = false;
+      
+      // Clear all timeouts and animation frames
+      clearTimeout(timeoutId);
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+      
+      // Show all lines immediately
+      typingLines.forEach((line, index) => {
+        const lineElement = line as HTMLElement;
+        lineElement.style.opacity = '1';
+        lineElement.classList.remove('typing');
+        lineElement.classList.add('complete');
+        // Restore original content with proper > symbol
+        const originalTexts = [
+          'me_2021: Just starting to code...',
+          'me_2022: Ok, this is weird...',
+          'me_2023: How do I center a div?',
+          'me_2024: Not important. How do I center my life?',
+          'me_2025: Code runs. I\'m happy. That\'s enough.'
+        ];
+        // Clear and rebuild the HTML structure
+        lineElement.innerHTML = '';
+        const promptSpan = document.createElement('span');
+        promptSpan.className = 'text-green-400';
+        promptSpan.textContent = '> ';
+        lineElement.appendChild(promptSpan);
+        lineElement.appendChild(document.createTextNode(originalTexts[index]));
+      });
+    }
+    
+    function typeNextLine() {
+      if (currentLineIndex < typingLines.length && isAnimating) {
+        const line = typingLines[currentLineIndex] as HTMLElement;
+        const originalText = line.textContent || '';
+        line.textContent = '';
+        line.style.opacity = '1';
+        line.classList.add('typing');
+        
+        let charIndex = 0;
+        const textLength = originalText.length;
+        
+        function typeChar() {
+          if (charIndex < textLength && isAnimating) {
+            // Use requestAnimationFrame for smoother performance
+            animationFrameId = requestAnimationFrame(() => {
+              if (isAnimating) {
+                line.textContent = originalText.substring(0, charIndex + 1);
+                charIndex++;
+                timeoutId = setTimeout(typeChar, 15); // Much faster typing
+              }
+            });
+          } else if (isAnimating) {
+            // Line complete
+            line.classList.remove('typing');
+            line.classList.add('complete');
+            
+            // Move to next line after a shorter delay
+            timeoutId = setTimeout(() => {
+              currentLineIndex++;
+              typeNextLine();
+            }, 200); // Much faster line transitions
+          }
+        }
+        
+        typeChar();
+      }
+    }
+    
+    // Add click handler to skip animation
+    const shellElement = document.querySelector('.interactive-shell') as HTMLElement;
+    if (shellElement) {
+      shellElement.addEventListener('click', skipAnimation);
+      // Also add pointer events to ensure clicks work
+      shellElement.style.pointerEvents = 'auto';
+    }
+    
+    // Start shell animation after name typing finishes - only if not already animated
+    const shellStartTimeout = setTimeout(() => {
+      if (!hasAnimated && !isAnimating) {
+        isAnimating = true;
+        hasAnimated = true;
+        typeNextLine();
+      }
+    }, 4000);
+    
+    return () => {
+      clearTimeout(shellStartTimeout);
+      clearTimeout(timeoutId);
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+      if (shellElement) {
+        shellElement.removeEventListener('click', skipAnimation);
+      }
     };
   }, []);
 
@@ -291,34 +408,30 @@ function App() {
 
               {/* Right Column - Interactive Element */}
               <div className="flex justify-center lg:justify-end">
-                <div className="interactive-code-block bg-gray-900/80 backdrop-blur-sm rounded-2xl p-8 border border-white/20 shadow-2xl max-w-md w-full">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                    <span className="text-gray-400 text-sm ml-2">portfolio.js</span>
+                <div className="interactive-shell bg-gray-900/80 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-2xl max-w-md w-full cursor-pointer">
+                  <div className="flex items-center mb-4">
+                    <span className="text-gray-400 text-sm font-mono">shell</span>
                   </div>
                   
-                  <div className="code-content text-sm font-mono">
-                    <div className="text-blue-400 mb-2">const developer = {`{`}</div>
-                    <div className="ml-4 space-y-1">
-                      <div className="text-green-400">name: <span className="text-yellow-300">'Zimaad Azhari'</span>,</div>
-                      <div className="text-green-400">role: <span className="text-yellow-300">'Full Stack Developer'</span>,</div>
-                      <div className="text-green-400">passion: <span className="text-yellow-300">'Creating amazing experiences'</span>,</div>
-                      <div className="text-green-400">skills: [</div>
-                      <div className="ml-4 text-yellow-300">
-                        <div>'React', 'TypeScript', 'Python',</div>
-                        <div>'Node.js', 'Design', 'Animation'</div>
-                      </div>
-                      <div className="text-green-400">],</div>
-                      <div className="text-green-400">status: <span className="text-cyan-400">'Available for opportunities'</span></div>
+                  <div className="shell-content text-sm font-mono text-gray-300 space-y-2">
+                    <div className="typing-line opacity-0">
+                      <span className="text-green-400">&gt;</span> me_2021: Just starting to code...
                     </div>
-                    <div className="text-blue-400">{`}`};</div>
-                    
-                    <div className="mt-4 text-gray-400">
-                      <div className="text-purple-400">// Ready to build something amazing?</div>
-                      <div className="text-green-400">developer.contact();</div>
+                    <div className="typing-line opacity-0">
+                      <span className="text-green-400">&gt;</span> me_2022: Ok, this is weird...
                     </div>
+                    <div className="typing-line opacity-0">
+                      <span className="text-green-400">&gt;</span> me_2023: How do I center a div?
+                    </div>
+                    <div className="typing-line opacity-0">
+                      <span className="text-green-400">&gt;</span> me_2024: Not important. How do I center my life?
+                    </div>
+                    <div className="typing-line opacity-0">
+                      <span className="text-green-400">&gt;</span> me_2025: Code runs. I'm happy. That's enough.
+                    </div>
+                  </div>
+                  
+                  <div className="mt-4 text-center">
                   </div>
                 </div>
               </div>
@@ -709,40 +822,41 @@ function App() {
           animation-delay: -10s;
         }
 
-        /* Interactive Code Block Animation */
-        .interactive-code-block {
-          animation: codeGlow 3s ease-in-out infinite alternate;
-          transition: all 0.3s ease;
+        /* Optimized Interactive Shell Animation */
+        .interactive-shell {
+          will-change: transform, box-shadow;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .interactive-code-block:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
-          border-color: rgba(59, 130, 246, 0.5);
+        .interactive-shell:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 15px 30px rgba(34, 197, 94, 0.2);
+          border-color: rgba(34, 197, 94, 0.4);
         }
 
-        @keyframes codeGlow {
-          0% {
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1);
-          }
-          100% {
-            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.2);
-          }
+        .typing-line {
+          will-change: opacity;
+          transition: opacity 0.2s ease;
+          min-height: 1.2em;
+          position: relative;
         }
 
-        .code-content {
-          animation: typewriter 4s steps(40, end) 2s both;
-          overflow: hidden;
-          white-space: nowrap;
+        .typing-line.typing::after {
+          content: '|';
+          color: #10b981;
+          animation: blink 1.2s infinite;
+          margin-left: 2px;
+          position: absolute;
         }
 
-        @keyframes typewriter {
-          from {
-            width: 0;
-          }
-          to {
-            width: 100%;
-          }
+        .typing-line.complete::after {
+          display: none;
+        }
+
+        @keyframes blink {
+          0%, 45% { opacity: 1; }
+          50%, 95% { opacity: 0; }
+          100% { opacity: 1; }
         }
 
         /* Responsive adjustments for hero section */
