@@ -16,7 +16,6 @@ function App() {
 
 
   useEffect(() => {
-    // Smooth typing animation for the name
     const nameText = "Hi, I'm Zimaad";
     let currentCharIndex = 0;
     
@@ -82,7 +81,15 @@ function App() {
     }
     
     // Start obsession animation after typing finishes (name takes ~1.6s + 0.8s delay + 1.5s cursor = 3.9s)
-    const startTimeout = setTimeout(obsessionDropAnimation, 4000);
+    // Add a small delay to ensure the first word also gets the fade-in animation
+    const startTimeout = setTimeout(() => {
+      // Initialize the first word with proper animation state
+      if (obsessionWordsElement.current) {
+        obsessionWordsElement.current.style.transform = 'translateY(-100%)';
+        obsessionWordsElement.current.style.opacity = '0';
+      }
+      obsessionDropAnimation();
+    }, 4000);
     
     return () => {
       clearTimeout(startTimeout);
@@ -251,31 +258,70 @@ function App() {
         </header>
 
         {/* HERO */}
-        <section id="home" className="hero min-h-screen flex flex-col justify-center items-center text-center relative overflow-hidden" style={{background: 'linear-gradient(to bottom right, rgba(0, 0, 0, 0.3), rgba(10, 10, 10, 0.3), rgba(5, 5, 5, 0.3))'}}>
+        <section id="home" className="hero min-h-screen flex items-center relative overflow-hidden" style={{background: 'linear-gradient(to bottom right, rgba(0, 0, 0, 0.3), rgba(10, 10, 10, 0.3), rgba(5, 5, 5, 0.3))'}}>
           {/* Floating Orbs */}
           <div className="floating-orb absolute w-15 h-15 rounded-full opacity-60 top-1/5 left-1/10 animate-float-orb"></div>
           <div className="floating-orb absolute w-10 h-10 rounded-full opacity-60 top-3/5 left-4/5 animate-float-orb delay-[-5s]"></div>
           <div className="floating-orb absolute w-20 h-20 rounded-full opacity-60 top-4/5 left-1/5 animate-float-orb delay-[-10s]"></div>
           
-          <div className="hero-content relative z-10">
-            <h1 
-              ref={nameElement}
-              className="text-5xl font-bold text-white mb-4 text-center typing-name"
-              style={{ minHeight: '1.2em' }}
-            ></h1>
-            
-            {/* Obsession Text */}
-            <div className="text-center mb-6">
-              <p className="text-lg text-gray-300 flex items-center justify-center flex-wrap">
-                <span className="whitespace-nowrap">I'm slightly obsessed with —</span>
-                <span className="obsession-words-container relative overflow-hidden ml-2 inline-flex items-center min-w-[200px] md:min-w-[400px]" style={{height: '1.5rem'}}>
-                  <span 
-                    ref={obsessionWordsElement}
-                    className="obsession-words text-gray-300 absolute left-0 w-full text-left"
-                    style={{top: '0', lineHeight: '1.5rem'}}
-                  ></span>
-                </span>
-              </p>
+          <div className="hero-content relative z-10 w-full max-w-7xl mx-auto px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              {/* Left Column - Text Content */}
+              <div className="text-left">
+                <h1 
+                  ref={nameElement}
+                  className="text-5xl lg:text-6xl font-bold text-white mb-6 typing-name"
+                  style={{ minHeight: '1.2em' }}
+                ></h1>
+                
+                {/* Obsession Text */}
+                <div className="mb-8">
+                  <p className="text-lg lg:text-xl text-gray-300 flex items-center">
+                    <span className="whitespace-nowrap">I'm slightly obsessed with —</span>
+                    <span className="obsession-words-container relative overflow-hidden ml-2 inline-flex items-center min-w-[200px] md:min-w-[400px]" style={{height: '1.5rem'}}>
+                      <span 
+                        ref={obsessionWordsElement}
+                        className="obsession-words text-gray-300 absolute left-0 w-full text-left"
+                        style={{top: '0', lineHeight: '1.5rem'}}
+                      ></span>
+                    </span>
+                  </p>
+                </div>
+              </div>
+
+              {/* Right Column - Interactive Element */}
+              <div className="flex justify-center lg:justify-end">
+                <div className="interactive-code-block bg-gray-900/80 backdrop-blur-sm rounded-2xl p-8 border border-white/20 shadow-2xl max-w-md w-full">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                    <span className="text-gray-400 text-sm ml-2">portfolio.js</span>
+                  </div>
+                  
+                  <div className="code-content text-sm font-mono">
+                    <div className="text-blue-400 mb-2">const developer = {`{`}</div>
+                    <div className="ml-4 space-y-1">
+                      <div className="text-green-400">name: <span className="text-yellow-300">'Zimaad Azhari'</span>,</div>
+                      <div className="text-green-400">role: <span className="text-yellow-300">'Full Stack Developer'</span>,</div>
+                      <div className="text-green-400">passion: <span className="text-yellow-300">'Creating amazing experiences'</span>,</div>
+                      <div className="text-green-400">skills: [</div>
+                      <div className="ml-4 text-yellow-300">
+                        <div>'React', 'TypeScript', 'Python',</div>
+                        <div>'Node.js', 'Design', 'Animation'</div>
+                      </div>
+                      <div className="text-green-400">],</div>
+                      <div className="text-green-400">status: <span className="text-cyan-400">'Available for opportunities'</span></div>
+                    </div>
+                    <div className="text-blue-400">{`}`};</div>
+                    
+                    <div className="mt-4 text-gray-400">
+                      <div className="text-purple-400">// Ready to build something amazing?</div>
+                      <div className="text-green-400">developer.contact();</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -661,6 +707,57 @@ function App() {
           background: radial-gradient(circle, rgba(22, 33, 62, 0.2), transparent);
           animation: float-orb 15s infinite ease-in-out;
           animation-delay: -10s;
+        }
+
+        /* Interactive Code Block Animation */
+        .interactive-code-block {
+          animation: codeGlow 3s ease-in-out infinite alternate;
+          transition: all 0.3s ease;
+        }
+
+        .interactive-code-block:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+          border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        @keyframes codeGlow {
+          0% {
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1);
+          }
+          100% {
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.2);
+          }
+        }
+
+        .code-content {
+          animation: typewriter 4s steps(40, end) 2s both;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+
+        @keyframes typewriter {
+          from {
+            width: 0;
+          }
+          to {
+            width: 100%;
+          }
+        }
+
+        /* Responsive adjustments for hero section */
+        @media (max-width: 1024px) {
+          .hero-content {
+            text-align: center;
+          }
+          
+          .hero-content .text-left {
+            text-align: center;
+          }
+          
+          .interactive-code-block {
+            margin-top: 2rem;
+          }
         }
 
         /* Smooth scrolling */
