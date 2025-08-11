@@ -1,9 +1,12 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SplashCursor } from './components/ui/splash-cursor';
 
 function App() {
   const obsessionWordsElement = useRef<HTMLSpanElement>(null);
   const nameElement = useRef<HTMLHeadingElement>(null);
+  const [activeView, setActiveView] = useState<'shell' | 'portfolio'>('shell');
+  const [showContact, setShowContact] = useState(false);
+  const contactRef = useRef<HTMLDivElement>(null);
   
   const obsessionWords = [
     "automating things that probably didn't need automating",
@@ -18,29 +21,45 @@ function App() {
   useEffect(() => {
     const nameText = "Hi, I'm Zimaad";
     let currentCharIndex = 0;
+    let animationId: number;
+    let lastTime = 0;
+    const charDelay = 80; // Consistent 80ms delay between characters
     
-    function typeNextChar() {
+    function typeNextChar(currentTime: number) {
       if (!nameElement.current) return;
       
-      if (currentCharIndex <= nameText.length) {
-        const displayText = nameText.substring(0, currentCharIndex);
-        nameElement.current.innerHTML = displayText;
-        currentCharIndex++;
-        
-        // Use requestAnimationFrame for smoother animation
-        setTimeout(() => requestAnimationFrame(typeNextChar), 100);
-      } else {
-        // Remove cursor after typing is complete
-        setTimeout(() => {
-          if (nameElement.current) {
-            nameElement.current.classList.add('typing-complete');
-          }
-        }, 1500); // Keep cursor for 1.5 seconds after typing
+      // Ensure consistent timing
+      if (currentTime - lastTime >= charDelay) {
+        if (currentCharIndex <= nameText.length) {
+          const displayText = nameText.substring(0, currentCharIndex);
+          nameElement.current.innerHTML = displayText;
+          currentCharIndex++;
+          lastTime = currentTime;
+        } else {
+          // Remove cursor after typing is complete
+          setTimeout(() => {
+            if (nameElement.current) {
+              nameElement.current.classList.add('typing-complete');
+            }
+          }, 1500); // Keep cursor for 1.5 seconds after typing
+          return;
+        }
       }
+      
+      animationId = requestAnimationFrame(typeNextChar);
     }
     
     // Start typing animation after a short delay
-    setTimeout(() => requestAnimationFrame(typeNextChar), 800);
+    setTimeout(() => {
+      lastTime = performance.now();
+      animationId = requestAnimationFrame(typeNextChar);
+    }, 800);
+    
+    return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -103,49 +122,35 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // Optimized shell typing animation - runs only once
+    // Optimized shell typing animation - runs when shell view is active
     const typingLines = document.querySelectorAll('.typing-line');
     let currentLineIndex = 0;
     let animationFrameId: number;
     let timeoutId: NodeJS.Timeout;
     let isAnimating = false;
-    let hasAnimated = false;
     
-    function skipAnimation() {
-      console.log('Skip animation clicked!'); // Debug log
-      
-      // Stop all animations immediately
-      isAnimating = false;
-      
-      // Clear all timeouts and animation frames
-      clearTimeout(timeoutId);
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-      
-      // Show all lines immediately
-      typingLines.forEach((line, index) => {
-        const lineElement = line as HTMLElement;
-        lineElement.style.opacity = '1';
-        lineElement.classList.remove('typing');
-        lineElement.classList.add('complete');
-        // Restore original content with proper > symbol
-        const originalTexts = [
-          'me_2021: Just starting to code...',
-          'me_2022: Ok, this is weird...',
-          'me_2023: How do I center a div?',
-          'me_2024: Not important. How do I center my life?',
-          'me_2025: Code runs. I\'m happy. That\'s enough.'
-        ];
-        // Clear and rebuild the HTML structure
-        lineElement.innerHTML = '';
-        const promptSpan = document.createElement('span');
-        promptSpan.className = 'text-green-400';
-        promptSpan.textContent = '> ';
-        lineElement.appendChild(promptSpan);
-        lineElement.appendChild(document.createTextNode(originalTexts[index]));
-      });
-    }
+    // Reset all lines to initial state
+    const originalTexts = [
+      'me_2021: Just starting to code...',
+      'me_2022: Ok, this is weird...',
+      'me_2023: How do I center a div?',
+      'me_2024: Not important. How do I center my life?',
+      'me_2025: Code runs. I\'m happy. That\'s enough.'
+    ];
+    
+    typingLines.forEach((line, index) => {
+      const lineElement = line as HTMLElement;
+      lineElement.style.opacity = '0';
+      lineElement.classList.remove('typing', 'complete');
+      lineElement.innerHTML = '';
+      const promptSpan = document.createElement('span');
+      promptSpan.className = 'text-green-400';
+      promptSpan.textContent = '> ';
+      lineElement.appendChild(promptSpan);
+      lineElement.appendChild(document.createTextNode(originalTexts[index]));
+    });
+    
+
     
     function typeNextLine() {
       if (currentLineIndex < typingLines.length && isAnimating) {
@@ -185,34 +190,50 @@ function App() {
       }
     }
     
-    // Add click handler to skip animation
-    const shellElement = document.querySelector('.interactive-shell') as HTMLElement;
-    if (shellElement) {
-      shellElement.addEventListener('click', skipAnimation);
-      // Also add pointer events to ensure clicks work
-      shellElement.style.pointerEvents = 'auto';
+
+    
+    // Start shell animation when shell view is active
+    let shellStartTimeout: NodeJS.Timeout;
+    if (activeView === 'shell') {
+      // Reset animation state
+      currentLineIndex = 0;
+      isAnimating = false;
+      
+      shellStartTimeout = setTimeout(() => {
+        if (!isAnimating) {
+          isAnimating = true;
+          typeNextLine();
+        }
+      }, 1000); // Reduced delay for faster response when switching
     }
     
-    // Start shell animation after name typing finishes - only if not already animated
-    const shellStartTimeout = setTimeout(() => {
-      if (!hasAnimated && !isAnimating) {
-        isAnimating = true;
-        hasAnimated = true;
-        typeNextLine();
-      }
-    }, 4000);
-    
     return () => {
-      clearTimeout(shellStartTimeout);
+      if (shellStartTimeout) {
+        clearTimeout(shellStartTimeout);
+      }
       clearTimeout(timeoutId);
       if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
       }
-      if (shellElement) {
-        shellElement.removeEventListener('click', skipAnimation);
-      }
     };
-  }, []);
+  }, [activeView]);
+
+  // Handle clicks outside contact area
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (contactRef.current && !contactRef.current.contains(event.target as Node)) {
+        setShowContact(false);
+      }
+    }
+
+    if (showContact) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showContact]);
 
   useEffect(() => {
     // Enhanced Intersection Observer for scroll animations
@@ -328,18 +349,15 @@ function App() {
       const sections = document.querySelectorAll('#about, #skills, #projects, .social-section');
       const projectItems = document.querySelectorAll('.project-item');
       
-      console.log('Found sections to observe:', sections.length);
-      console.log('Found project items to observe:', projectItems.length);
+
       
-      sections.forEach(section => {
-        console.log('Observing:', section.id || section.className);
-        scrollObserver.observe(section);
-      });
+              sections.forEach(section => {
+          scrollObserver.observe(section);
+        });
       
-      projectItems.forEach(project => {
-        console.log('Observing project:', project.className);
-        scrollObserver.observe(project);
-      });
+              projectItems.forEach(project => {
+          scrollObserver.observe(project);
+        });
     }, 100);
 
     return () => scrollObserver.disconnect();
@@ -395,11 +413,11 @@ function App() {
                 <div className="mb-8">
                   <p className="text-lg lg:text-xl text-gray-300 flex items-center">
                     <span className="whitespace-nowrap">I'm slightly obsessed with —</span>
-                    <span className="obsession-words-container relative overflow-hidden ml-2 inline-flex items-center min-w-[200px] md:min-w-[400px]" style={{height: '1.5rem'}}>
+                    <span className="obsession-words-container relative overflow-hidden ml-2 inline-flex items-center min-w-[300px] md:min-w-[500px] lg:min-w-[600px]" style={{height: '2rem'}}>
                       <span 
                         ref={obsessionWordsElement}
-                        className="obsession-words text-gray-300 absolute left-0 w-full text-left"
-                        style={{top: '0', lineHeight: '1.5rem'}}
+                        className="obsession-words text-gray-300 absolute left-0 w-full text-left text-lg lg:text-xl"
+                        style={{top: '0', lineHeight: '2rem'}}
                       ></span>
                     </span>
                   </p>
@@ -408,30 +426,91 @@ function App() {
 
               {/* Right Column - Interactive Element */}
               <div className="flex justify-center lg:justify-end">
-                <div className="interactive-shell bg-gray-900/80 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-2xl max-w-md w-full cursor-pointer">
-                  <div className="flex items-center mb-4">
-                    <span className="text-gray-400 text-sm font-mono">shell</span>
+                <div 
+                  className="interactive-container bg-gray-900/80 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-2xl max-w-md w-full relative z-10 cursor-pointer" 
+                  style={{ pointerEvents: 'auto' }}
+                  onClick={() => setActiveView(activeView === 'shell' ? 'portfolio' : 'shell')}
+                >
+                  {/* File Header */}
+                  <div 
+                    className="flex items-center justify-between mb-4 relative z-50 w-full" 
+                    style={{ pointerEvents: 'auto' }}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <div className="flex space-x-1">
+                        <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                        <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                        <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                      </div>
+                      <span className="text-gray-400 text-sm font-mono hover:text-white transition-colors">
+                        {activeView === 'shell' ? 'shell' : 'portfolio.js'}
+                      </span>
+                    </div>
                   </div>
                   
-                  <div className="shell-content text-sm font-mono text-gray-300 space-y-2">
-                    <div className="typing-line opacity-0">
-                      <span className="text-green-400">&gt;</span> me_2021: Just starting to code...
+                  {/* Content Container with Animation */}
+                  <div className="content-container relative min-h-[200px]">
+                    {/* Shell View */}
+                    <div 
+                      className={`shell-content text-sm font-mono text-gray-300 space-y-2 absolute inset-0 transition-all duration-500 ease-in-out ${
+                        activeView === 'shell' 
+                          ? 'opacity-100 translate-y-0' 
+                          : 'opacity-0 translate-y-4 pointer-events-none'
+                      }`}
+                    >
+                      <div className="typing-line opacity-0">
+                        <span className="text-green-400">&gt;</span> me_2021: Just starting to code...
+                      </div>
+                      <div className="typing-line opacity-0">
+                        <span className="text-green-400">&gt;</span> me_2022: Ok, this is weird...
+                      </div>
+                      <div className="typing-line opacity-0">
+                        <span className="text-green-400">&gt;</span> me_2023: How do I center a div?
+                      </div>
+                      <div className="typing-line opacity-0">
+                        <span className="text-green-400">&gt;</span> me_2024: Not important. How do I center my life?
+                      </div>
+                      <div className="typing-line opacity-0">
+                        <span className="text-green-400">&gt;</span> me_2025: Code runs. I'm happy. That's enough.
+                      </div>
                     </div>
-                    <div className="typing-line opacity-0">
-                      <span className="text-green-400">&gt;</span> me_2022: Ok, this is weird...
+                    
+                    {/* Portfolio.js View */}
+                    <div 
+                      className={`portfolio-content text-sm font-mono text-gray-300 absolute inset-0 transition-all duration-500 ease-in-out ${
+                        activeView === 'portfolio' 
+                          ? 'opacity-100 translate-y-0' 
+                          : 'opacity-0 translate-y-4 pointer-events-none'
+                      }`}
+                    >
+                      <div className="mb-2">
+                        <span className="text-red-400">const</span> <span className="text-blue-400">developer</span> = <span className="text-yellow-400">{'{'}</span>
+                      </div>
+                      <div className="ml-4 space-y-1">
+                        <div><span className="text-green-400">name</span>: <span className="text-yellow-400">'Zimaad Azhari'</span>,</div>
+                        <div><span className="text-green-400">role</span>: <span className="text-yellow-400">'Full Stack Developer'</span>,</div>
+                        <div><span className="text-green-400">passion</span>: <span className="text-yellow-400">'Creating amazing experiences'</span>,</div>
+                        <div><span className="text-green-400">status</span>: <span className="text-yellow-400">'Available for opportunities'</span></div>
+                      </div>
+                      <div><span className="text-yellow-400">{'}'}</span>;</div>
+                      <div className="mt-4 text-gray-500">// Ready to build something amazing?</div>
+                      <div 
+                        ref={contactRef}
+                        className="cursor-pointer hover:bg-gray-800/30 p-1 rounded transition-colors inline-block"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowContact(!showContact);
+                        }}
+                      >
+                        <span className="text-blue-400">developer</span>.<span className="text-green-400">contact</span>();
+                        {showContact && (
+                          <div className="mt-4 p-3 bg-gray-800/50 rounded border border-gray-600 text-sm absolute z-50">
+                            <div className="text-gray-300 mb-2">Email: <span className="text-blue-400">zimaadazhari911@gmail.com</span></div>
+                            <div className="text-gray-300">Phone No.: <span className="text-blue-400">+91 9326155384</span></div>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <div className="typing-line opacity-0">
-                      <span className="text-green-400">&gt;</span> me_2023: How do I center a div?
-                    </div>
-                    <div className="typing-line opacity-0">
-                      <span className="text-green-400">&gt;</span> me_2024: Not important. How do I center my life?
-                    </div>
-                    <div className="typing-line opacity-0">
-                      <span className="text-green-400">&gt;</span> me_2025: Code runs. I'm happy. That's enough.
-                    </div>
-                  </div>
-                  
-                  <div className="mt-4 text-center">
                   </div>
                 </div>
               </div>
@@ -442,7 +521,7 @@ function App() {
         {/* ABOUT */}
         <section id="about" className="fade-in py-16 px-8 text-center relative z-1">
           <div className="relative z-10">
-            <div className="backdrop-blur-sm bg-black/30 rounded-2xl p-8 mx-auto max-w-4xl border border-white/10 shadow-2xl">
+            <div className="backdrop-blur-sm bg-black/30 rounded-2xl p-8 mx-auto max-w-4xl shadow-2xl">
               <h2 className="text-4xl font-bold text-white mb-12 opacity-0 transform translate-y-8 transition-all duration-600">About Me</h2>
               <div className="about-content">
                 <p className="text-gray-300 text-xl leading-relaxed opacity-0 transform translate-y-10 transition-all duration-800 delay-200">
@@ -453,14 +532,11 @@ function App() {
           </div>
         </section>
 
-        {/* INTERACTIVE SEPARATOR - Black space for splash cursor animation */}
-        <div className="h-32 relative z-1">
-          {/* This section allows the splash cursor to be visible and interactive */}
-        </div>
+
 
         {/* SKILLS */}
         <section id="skills" className="fade-in py-16 px-8 text-center relative z-1">
-          <div className="relative z-10"></div>
+          <div className="relative z-10">
             <div className="backdrop-blur-sm bg-black/20 rounded-2xl p-8 mx-auto max-w-6xl border border-white/10 shadow-2xl">
               <h2 className="text-4xl font-bold text-white mb-12 opacity-0 transform translate-y-8 transition-all duration-600">Skills & Technologies</h2>
               <div className="skills-grid flex flex-wrap justify-center items-center gap-6 mt-8 max-w-5xl mx-auto">
@@ -492,6 +568,7 @@ function App() {
               <i className="fab fa-java text-4xl text-red-500"></i>
               <p className="font-bold text-sm text-white">Java</p>
             </div>
+              </div>
             </div>
           </div>
         </section>
@@ -500,7 +577,7 @@ function App() {
         <section id="projects" className="fade-in py-20 px-8 relative z-1">
           <div className="relative z-10 max-w-6xl mx-auto">
             <div className="backdrop-blur-sm bg-black/10 rounded-2xl p-8 border border-white/10 shadow-2xl">
-              <h2 className="text-4xl font-bold text-white mb-16 text-center opacity-0 transform translate-y-8 transition-all duration-1000 ease-out">Featured Projects</h2>
+              <h2 className="text-4xl font-bold text-white mb-16 text-center opacity-0 transform translate-y-8 transition-all duration-1000 ease-out">My Work</h2>
               
               {/* Central Timeline Line */}
               <div className="relative">
@@ -512,13 +589,12 @@ function App() {
                 <div className="w-6 h-6 bg-blue-500 rounded-full border-4 border-white/30 relative z-10 flex-shrink-0 shadow-lg"></div>
                 <div className="w-1/2 pl-8">
                   <div className="bg-gray-900/70 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-blue-400/30 transition-all duration-300 hover:transform hover:scale-105 border border-white/20 hover:border-blue-400/50">
-                    <h3 className="text-2xl font-bold text-white mb-4">Project 1</h3>
+                    <h3 className="text-2xl font-bold text-white mb-4">AI-Powered Internal Order Management System</h3>
                     <div className="bg-gray-600 rounded-lg h-48 mb-4 flex items-center justify-center">
                       <span className="text-gray-400 text-lg">Project Image</span>
                     </div>
                     <p className="text-gray-300 leading-relaxed">
-                      A revolutionary app that turns your coffee addiction into a productivity superpower. Features include 
-                      caffeine-to-code conversion algorithms, automated espresso ordering, and real-time energy level monitoring.
+                      Built for UrbanTech Services LLP to streamline procurement and quotation workflows. The system uses Gemini API for AI-driven email summarization, integrates with Microsoft Graph API for secure email handling, and provides a centralized dashboard for real-time order tracking. Developed with React and Tailwind CSS for a clean, responsive interface, delivering faster decisions and improved operational efficiency.
                     </p>
                   </div>
                 </div>
@@ -528,13 +604,12 @@ function App() {
               <div className="project-item project-2 flex items-center mb-20 opacity-0 transform -translate-x-16 translate-y-8 transition-all duration-1000 ease-out">
                 <div className="w-1/2 pr-8">
                   <div className="bg-gray-900/70 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-blue-400/30 transition-all duration-300 hover:transform hover:scale-105 border border-white/20 hover:border-blue-400/50">
-                    <h3 className="text-2xl font-bold text-white mb-4">Project 2</h3>
+                    <h3 className="text-2xl font-bold text-white mb-4">Intelligent Website FAQ Chatbot</h3>
                     <div className="bg-gray-600 rounded-lg h-48 mb-4 flex items-center justify-center">
                       <span className="text-gray-400 text-lg">Project Image</span>
                     </div>
                     <p className="text-gray-300 leading-relaxed">
-                      An AI-powered sock matching service that uses machine learning to reunite lost socks with their partners. 
-                      Includes advanced pattern recognition, emotional support for lonely socks, and a witness protection program for fugitive pairs.
+                      Developed an AI-powered chatbot capable of answering user queries by crawling and extracting information from a target website. Implemented an embedding-based search system to retrieve the most relevant content using cosine similarity, and integrated it with OpenAI's language model for natural, context-aware responses.
                     </p>
                   </div>
                 </div>
@@ -548,13 +623,12 @@ function App() {
                 <div className="w-6 h-6 bg-blue-500 rounded-full border-4 border-white/30 relative z-10 flex-shrink-0 shadow-lg"></div>
                 <div className="w-1/2 pl-8">
                   <div className="bg-gray-900/70 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-blue-400/30 transition-all duration-300 hover:transform hover:scale-105 border border-white/20 hover:border-blue-400/50">
-                    <h3 className="text-2xl font-bold text-white mb-4">Project 3</h3>
+                    <h3 className="text-2xl font-bold text-white mb-4">Campus Lost & Found Portal</h3>
                     <div className="bg-gray-600 rounded-lg h-48 mb-4 flex items-center justify-center">
                       <span className="text-gray-400 text-lg">Project Image</span>
                     </div>
                     <p className="text-gray-300 leading-relaxed">
-                      A time-traveling debugging tool that goes back in time to prevent bugs before they happen. 
-                      Features include paradox-resistant code editing, temporal branch management, and a quantum debugger that exists in multiple states simultaneously.
+                      A web application that streamlines the process of reporting and retrieving lost items on campus. Built with React, Tailwind CSS, and Firebase, it enables students to log in via Google, post lost/found items with images, filter listings by date, contact item owners, and mark items as claimed — all in a secure and user-friendly interface.
                     </p>
                   </div>
                 </div>
@@ -640,6 +714,7 @@ function App() {
           overflow: hidden;
           white-space: nowrap;
           min-height: 1.2em;
+          will-change: contents;
         }
         
         .typing-name::after {
@@ -651,15 +726,16 @@ function App() {
           display: inline-block;
           transform: translateZ(0);
           will-change: opacity;
+          animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
         }
         
         .typing-complete::after {
-          animation: fade-out 0.5s ease-out forwards;
+          animation: fade-out 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
         
         @keyframes smooth-blink {
-          0%, 45% { opacity: 1; }
-          50%, 95% { opacity: 0; }
+          0%, 40% { opacity: 1; }
+          50%, 90% { opacity: 0; }
           100% { opacity: 1; }
         }
         
@@ -671,8 +747,9 @@ function App() {
         .obsession-words {
           transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           display: block;
-          font-size: 1rem;
+          font-size: inherit;
           white-space: nowrap;
+          line-height: inherit;
         }
 
         /* Responsive styling for obsession text */
@@ -695,6 +772,7 @@ function App() {
           
           .hero-content .obsession-words-container {
             margin-left: 0 !important;
+            min-width: 320px !important;
           }
         }
 
@@ -822,13 +900,13 @@ function App() {
           animation-delay: -10s;
         }
 
-        /* Optimized Interactive Shell Animation */
-        .interactive-shell {
+        /* Optimized Interactive Container Animation */
+        .interactive-container {
           will-change: transform, box-shadow;
           transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .interactive-shell:hover {
+        .interactive-container:hover {
           transform: translateY(-3px);
           box-shadow: 0 15px 30px rgba(34, 197, 94, 0.2);
           border-color: rgba(34, 197, 94, 0.4);

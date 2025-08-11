@@ -55,7 +55,7 @@ function SplashCursor({
 
     // Make canvas always visible
     canvas.style.pointerEvents = 'auto';
-    canvas.style.opacity = '1';
+    canvas.style.opacity = '1.2'; // Slightly increased opacity
     canvas.style.display = 'block';
 
     function pointerPrototype(this: any) {
@@ -1078,9 +1078,9 @@ function SplashCursor({
 
     function clickSplat(pointer: any) {
       const color = generateColor();
-      if (color.r !== undefined) color.r *= 10.0;
-      if (color.g !== undefined) color.g *= 10.0;
-      if (color.b !== undefined) color.b *= 10.0;
+      if (color.r !== undefined) color.r *= 15.0; // Increased from 10.0 to 15.0
+      if (color.g !== undefined) color.g *= 15.0; // Increased from 10.0 to 15.0
+      if (color.b !== undefined) color.b *= 15.0; // Increased from 10.0 to 15.0
       let dx = 10 * (Math.random() - 0.5);
       let dy = 30 * (Math.random() - 0.5);
       splat(pointer.texcoordX, pointer.texcoordY, dx, dy, color);
@@ -1157,9 +1157,9 @@ function SplashCursor({
 
     function generateColor() {
       let c = HSVtoRGB(Math.random(), 1.0, 1.0);
-      if (c.r !== undefined) c.r *= 0.15;
-      if (c.g !== undefined) c.g *= 0.15;
-      if (c.b !== undefined) c.b *= 0.15;
+      if (c.r !== undefined) c.r *= 0.4; // Increased from 0.15 to 0.4
+      if (c.g !== undefined) c.g *= 0.4; // Increased from 0.15 to 0.4
+      if (c.b !== undefined) c.b *= 0.4; // Increased from 0.15 to 0.4
       return c;
     }
 
@@ -1373,7 +1373,7 @@ function SplashCursor({
         height: '100vh',
         zIndex: 0,
         pointerEvents: 'auto',
-        opacity: 1,
+        opacity: 1.2, // Increased opacity for more visible effects
         background: 'transparent'
       }}
     />
