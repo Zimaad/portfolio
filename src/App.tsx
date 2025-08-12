@@ -453,11 +453,6 @@ function App() {
 
         {/* HERO */}
         <section id="home" className="hero min-h-screen flex items-center relative overflow-hidden px-4 sm:px-8" style={{background: 'linear-gradient(to bottom right, rgba(0, 0, 0, 0.3), rgba(10, 10, 10, 0.3), rgba(5, 5, 5, 0.3))'}}>
-          {/* Floating Orbs */}
-          <div className="floating-orb absolute w-8 h-8 sm:w-15 sm:h-15 rounded-full opacity-60 top-1/5 left-1/10 animate-float-orb"></div>
-          <div className="floating-orb absolute w-6 h-6 sm:w-10 sm:h-10 rounded-full opacity-60 top-3/5 left-4/5 animate-float-orb delay-[-5s]"></div>
-          <div className="floating-orb absolute w-12 h-12 sm:w-20 sm:h-20 rounded-full opacity-60 top-4/5 left-1/5 animate-float-orb delay-[-10s]"></div>
-          
           <div className="hero-content relative z-10 w-full max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
               {/* Left Column - Text Content */}
@@ -680,7 +675,7 @@ function App() {
 
               {/* Desktop Timeline Layout */}
               <div className="hidden lg:block relative">
-                <div className="absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-blue-400 via-purple-500 to-blue-400 h-full opacity-80"></div>
+                <div className="absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-blue-400 via-purple-500 to-blue-400 h-full opacity-80 lg:block hidden"></div>
               
                 {/* Project 1 - Right Side */}
                 <div className="project-item project-1 flex items-center mb-20 opacity-0 transform translate-x-16 translate-y-8 transition-all duration-1000 ease-out">
@@ -955,42 +950,7 @@ function App() {
           font-weight: 900;
         }
 
-        /* Floating Orbs Animation */
-        @keyframes float-orb {
-          0%, 100% { 
-            transform: translateY(0px) translateX(0px) scale(1);
-            opacity: 0.6;
-          }
-          25% { 
-            transform: translateY(-100px) translateX(50px) scale(1.2);
-            opacity: 0.8;
-          }
-          50% { 
-            transform: translateY(-50px) translateX(-30px) scale(0.8);
-            opacity: 0.4;
-          }
-          75% { 
-            transform: translateY(30px) translateX(-50px) scale(1.1);
-            opacity: 0.7;
-          }
-        }
 
-        .floating-orb:nth-child(1) {
-          background: radial-gradient(circle, rgba(0, 170, 255, 0.3), transparent);
-          animation: float-orb 15s infinite ease-in-out;
-        }
-
-        .floating-orb:nth-child(2) {
-          background: radial-gradient(circle, rgba(83, 52, 131, 0.3), transparent);
-          animation: float-orb 15s infinite ease-in-out;
-          animation-delay: -5s;
-        }
-
-        .floating-orb:nth-child(3) {
-          background: radial-gradient(circle, rgba(22, 33, 62, 0.2), transparent);
-          animation: float-orb 15s infinite ease-in-out;
-          animation-delay: -10s;
-        }
 
         /* Optimized Interactive Container Animation */
         .interactive-container {
@@ -1081,10 +1041,7 @@ function App() {
             align-items: center;
           }
 
-          /* Mobile-specific performance optimizations */
-          .floating-orb {
-            will-change: transform;
-          }
+
 
           /* Reduce animation complexity on mobile for better performance */
           .interactive-container:hover {
