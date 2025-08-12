@@ -7,6 +7,7 @@ function App() {
   const [activeView, setActiveView] = useState<'shell' | 'portfolio'>('shell');
   const [showContact, setShowContact] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const contactRef = useRef<HTMLDivElement>(null);
   
   const obsessionWords = [
@@ -369,20 +370,35 @@ function App() {
     return () => scrollObserver.disconnect();
   }, []);
 
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+      setIsMobile(isMobileDevice);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <>
             {/* SplashCursor for hero section - optimized for performance */}
-      <SplashCursor
-        SIM_RESOLUTION={64}
-        DYE_RESOLUTION={256}
-        SPLAT_RADIUS={0.2}
-        SPLAT_FORCE={4000}
-        COLOR_UPDATE_SPEED={10}
-        DENSITY_DISSIPATION={3}
-        VELOCITY_DISSIPATION={2}
-        PRESSURE_ITERATIONS={8}
-        CURL={15}
-      />
+      {isMobile ? null : (
+        <SplashCursor
+          SIM_RESOLUTION={32}
+          DYE_RESOLUTION={128}
+          SPLAT_RADIUS={0.15}
+          SPLAT_FORCE={2000}
+          COLOR_UPDATE_SPEED={5}
+          DENSITY_DISSIPATION={4}
+          VELOCITY_DISSIPATION={3}
+          PRESSURE_ITERATIONS={4}
+          CURL={10}
+        />
+      )}
       
       <div className="portfolio">
         {/* HEADER */}
