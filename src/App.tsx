@@ -607,7 +607,7 @@ function App() {
           <div className="relative z-10">
             <div className="backdrop-blur-sm bg-black/20 rounded-xl sm:rounded-2xl p-6 sm:p-8 mx-auto max-w-6xl border border-white/10 shadow-2xl">
               <h2 className="text-3xl sm:text-4xl font-bold text-white mb-8 sm:mb-12 opacity-0 transform translate-y-8 transition-all duration-600">Skills & Technologies</h2>
-              <div className="skills-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6 mt-8 max-w-5xl mx-auto">
+              <div className="skills-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 sm:gap-6 mt-8 max-w-5xl mx-auto">
                 <div className="skill bg-gray-900/80 backdrop-blur-sm p-4 sm:p-6 rounded-xl transition-all duration-600 transform hover:translate-y-[-5px] hover:shadow-lg hover:shadow-blue-400/30 flex flex-col items-center gap-2 sm:gap-3 opacity-0 translate-y-12 scale-90 border border-white/20 hover:border-blue-400/50">
                   <i className="fab fa-html5 text-2xl sm:text-4xl text-orange-500"></i>
                   <p className="font-bold text-xs sm:text-sm text-white">HTML</p>
@@ -665,12 +665,12 @@ function App() {
                 {/* Project 2 */}
                 <div className="project-item opacity-0 transform translate-y-8 transition-all duration-1000 ease-out">
                   <div className="bg-gray-900/70 backdrop-blur-sm rounded-xl p-4 sm:p-6 shadow-lg hover:shadow-blue-400/30 transition-all duration-300 hover:transform hover:scale-105 border border-white/20 hover:border-blue-400/50">
-                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">Intelligent Website FAQ Chatbot</h3>
+                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">Campus Lost & Found Portal</h3>
                     <div className="bg-gray-600 rounded-lg h-32 sm:h-48 mb-4 flex items-center justify-center">
                       <span className="text-gray-400 text-sm sm:text-lg">Project Image</span>
                     </div>
                     <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
-                      Developed an AI-powered chatbot capable of answering user queries by crawling and extracting information from a target website. Implemented an embedding-based search system to retrieve the most relevant content using cosine similarity, and integrated it with OpenAI's language model for natural, context-aware responses.
+                      A web application that streamlines the process of reporting and retrieving lost items on campus. Built with React, Tailwind CSS, and Firebase, it enables students to log in via Google, post lost/found items with images, filter listings by date, contact item owners, and mark items as claimed — all in a secure and user-friendly interface.
                     </p>
                   </div>
                 </div>
@@ -678,12 +678,12 @@ function App() {
                 {/* Project 3 */}
                 <div className="project-item opacity-0 transform translate-y-8 transition-all duration-1000 ease-out">
                   <div className="bg-gray-900/70 backdrop-blur-sm rounded-xl p-4 sm:p-6 shadow-lg hover:shadow-blue-400/30 transition-all duration-300 hover:transform hover:scale-105 border border-white/20 hover:border-blue-400/50">
-                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">Campus Lost & Found Portal</h3>
+                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">Discord Server Enhancement Bot</h3>
                     <div className="bg-gray-600 rounded-lg h-32 sm:h-48 mb-4 flex items-center justify-center">
                       <span className="text-gray-400 text-sm sm:text-lg">Project Image</span>
                     </div>
                     <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
-                      A web application that streamlines the process of reporting and retrieving lost items on campus. Built with React, Tailwind CSS, and Firebase, it enables students to log in via Google, post lost/found items with images, filter listings by date, contact item owners, and mark items as claimed — all in a secure and user-friendly interface.
+                      A versatile Discord bot that streamlines server administration with automated moderation, custom commands, role management, and server analytics. Includes features like welcome systems, logging, and interactive utilities to create engaging community experiences.
                     </p>
                   </div>
                 </div>
@@ -714,12 +714,12 @@ function App() {
                 <div className="project-item project-2 flex items-center mb-20 opacity-0 transform -translate-x-16 translate-y-8 transition-all duration-1000 ease-out">
                   <div className="w-1/2 pr-8">
                     <div className="bg-gray-900/70 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-blue-400/30 transition-all duration-300 hover:transform hover:scale-105 border border-white/20 hover:border-blue-400/50">
-                      <h3 className="text-2xl font-bold text-white mb-4">Intelligent Website FAQ Chatbot</h3>
+                      <h3 className="text-2xl font-bold text-white mb-4">Campus Lost & Found Portal</h3>
                       <div className="bg-gray-600 rounded-lg h-48 mb-4 flex items-center justify-center">
                         <span className="text-gray-400 text-lg">Project Image</span>
                       </div>
                       <p className="text-gray-300 leading-relaxed">
-                        Developed an AI-powered chatbot capable of answering user queries by crawling and extracting information from a target website. Implemented an embedding-based search system to retrieve the most relevant content using cosine similarity, and integrated it with OpenAI's language model for natural, context-aware responses.
+                        A web application that streamlines the process of reporting and retrieving lost items on campus. Built with React, Tailwind CSS, and Firebase, it enables students to log in via Google, post lost/found items with images, filter listings by date, contact item owners, and mark items as claimed — all in a secure and user-friendly interface.
                       </p>
                     </div>
                   </div>
@@ -733,12 +733,12 @@ function App() {
                   <div className="w-6 h-6 bg-blue-500 rounded-full border-4 border-white/30 relative z-10 flex-shrink-0 shadow-lg"></div>
                   <div className="w-1/2 pl-8">
                     <div className="bg-gray-900/70 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-blue-400/30 transition-all duration-300 hover:transform hover:scale-105 border border-white/20 hover:border-blue-400/50">
-                      <h3 className="text-2xl font-bold text-white mb-4">Campus Lost & Found Portal</h3>
+                      <h3 className="text-2xl font-bold text-white mb-4">Discord Server Enhancement Bot</h3>
                       <div className="bg-gray-600 rounded-lg h-48 mb-4 flex items-center justify-center">
                         <span className="text-gray-400 text-lg">Project Image</span>
                       </div>
                       <p className="text-gray-300 leading-relaxed">
-                        A web application that streamlines the process of reporting and retrieving lost items on campus. Built with React, Tailwind CSS, and Firebase, it enables students to log in via Google, post lost/found items with images, filter listings by date, contact item owners, and mark items as claimed — all in a secure and user-friendly interface.
+                        A versatile Discord bot that streamlines server administration with automated moderation, custom commands, role management, and server analytics. Includes features like welcome systems, logging, and interactive utilities to create engaging community experiences.
                       </p>
                     </div>
                   </div>
@@ -1118,7 +1118,18 @@ function App() {
           
           .skill p {
             font-size: 0.75rem !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
           }
+        }
+
+        /* Prevent text wrapping in skill labels */
+        .skill p {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 100%;
         }
 
         /* Prevent horizontal scroll on mobile */
