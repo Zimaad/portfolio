@@ -481,12 +481,12 @@ function App() {
                 
                 {/* Obsession Text */}
                 <div className="mb-6 sm:mb-8">
-                  <p className="text-base sm:text-lg lg:text-xl text-gray-300 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-2">
+                  <p className="text-base sm:text-lg lg:text-xl text-gray-300 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-2 text-center sm:text-left">
                     <span className="whitespace-nowrap">I'm slightly obsessed with —</span>
-                    <span className="obsession-words-container relative overflow-hidden inline-flex items-center min-w-[280px] sm:min-w-[320px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[600px]" style={{height: '2rem'}}>
+                    <span className="obsession-words-container relative overflow-hidden inline-flex items-center justify-center sm:justify-start min-w-[280px] sm:min-w-[320px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[600px]" style={{height: '2rem'}}>
                       <span 
                         ref={obsessionWordsElement}
-                        className="obsession-words text-gray-300 absolute left-0 w-full text-left text-sm sm:text-base lg:text-lg xl:text-xl"
+                        className="obsession-words text-gray-300 absolute left-0 w-full text-center sm:text-left text-sm sm:text-base lg:text-lg xl:text-xl"
                         style={{top: '0', lineHeight: '2rem'}}
                       ></span>
                     </span>
@@ -606,8 +606,7 @@ function App() {
         <section id="skills" className="fade-in py-12 sm:py-16 px-4 sm:px-8 text-center relative z-1">
           <div className="relative z-10">
             <div className="backdrop-blur-sm bg-black/20 rounded-xl sm:rounded-2xl p-6 sm:p-8 mx-auto max-w-6xl border border-white/10 shadow-2xl">
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-8 sm:mb-12 opacity-0 transform translate-y-8 transition-all duration-600">Skills & Technologies</h2>
-              <div className="skills-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 sm:gap-6 mt-8 max-w-5xl mx-auto">
+              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-8 sm:mb-12 opacity-0 transform translate-y-8 transition-all duration-600">Skills & Technologies</h              <div className="skills-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 sm:gap-6 mt-8 max-w-5xl mx-auto">
                 <div className="skill bg-gray-900/80 backdrop-blur-sm p-4 sm:p-6 rounded-xl transition-all duration-600 transform hover:translate-y-[-5px] hover:shadow-lg hover:shadow-blue-400/30 flex flex-col items-center gap-2 sm:gap-3 opacity-0 translate-y-12 scale-90 border border-white/20 hover:border-blue-400/50">
                   <i className="fab fa-html5 text-2xl sm:text-4xl text-orange-500"></i>
                   <p className="font-bold text-xs sm:text-sm text-white">HTML</p>
