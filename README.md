@@ -140,7 +140,4 @@ Building this portfolio taught me the importance of:
 - **Code organization**: Clean, readable code is essential for maintainability
 - **Testing**: Regular testing across different devices and browsers
 
-## Future Improvements
-
----
 
