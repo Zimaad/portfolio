@@ -651,41 +651,38 @@ function App() {
               <div className="block lg:hidden space-y-8">
                 {/* Project 1 */}
                 <div className="project-item opacity-0 transform translate-y-8 transition-all duration-1000 ease-out">
-                  <div className="bg-gray-900/70 backdrop-blur-sm rounded-xl p-4 sm:p-6 shadow-lg hover:shadow-blue-400/30 transition-all duration-300 hover:transform hover:scale-105 border border-white/20 hover:border-blue-400/50">
-                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">AI-Powered Internal Order Management System</h3>
-                    <div className="bg-gray-600 rounded-lg h-32 sm:h-48 mb-4 flex items-center justify-center">
-                      <span className="text-gray-400 text-sm sm:text-lg">Project Image</span>
+                  <a href="https://www.linkedin.com/posts/zimaad_from-email-chaos-to-organized-intelligence-activity-7346246268031045632-bwOl?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAAE7JaLoBySqL47aM0xLgGoUkkiELOZ6jTYA" target="_blank" rel="noopener noreferrer" className="block">
+                    <div className="bg-gray-900/70 backdrop-blur-sm rounded-xl p-4 sm:p-6 shadow-lg hover:shadow-blue-400/30 transition-all duration-300 hover:transform hover:scale-105 border border-white/20 hover:border-blue-400/50 cursor-pointer">
+                      <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">AI-Powered Internal Order Management System</h3>
+                      <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+                        Built for UrbanTech Services LLP to streamline procurement and quotation workflows. The system uses Gemini API for AI-driven email summarization, integrates with Microsoft Graph API for secure email handling, and provides a centralized dashboard for real-time order tracking. Developed with React and Tailwind CSS for a clean, responsive interface, delivering faster decisions and improved operational efficiency.
+                      </p>
                     </div>
-                    <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
-                      Built for UrbanTech Services LLP to streamline procurement and quotation workflows. The system uses Gemini API for AI-driven email summarization, integrates with Microsoft Graph API for secure email handling, and provides a centralized dashboard for real-time order tracking. Developed with React and Tailwind CSS for a clean, responsive interface, delivering faster decisions and improved operational efficiency.
-                    </p>
-                  </div>
+                  </a>
                 </div>
 
                 {/* Project 2 */}
                 <div className="project-item opacity-0 transform translate-y-8 transition-all duration-1000 ease-out">
-                  <div className="bg-gray-900/70 backdrop-blur-sm rounded-xl p-4 sm:p-6 shadow-lg hover:shadow-blue-400/30 transition-all duration-300 hover:transform hover:scale-105 border border-white/20 hover:border-blue-400/50">
-                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">Campus Lost & Found Portal</h3>
-                    <div className="bg-gray-600 rounded-lg h-32 sm:h-48 mb-4 flex items-center justify-center">
-                      <span className="text-gray-400 text-sm sm:text-lg">Project Image</span>
+                  <a href="https://lostandfoundv2-cse6yjx0f-zimaad-azharis-projects.vercel.app/" target="_blank" rel="noopener noreferrer" className="block">
+                    <div className="bg-gray-900/70 backdrop-blur-sm rounded-xl p-4 sm:p-6 shadow-lg hover:shadow-blue-400/30 transition-all duration-300 hover:transform hover:scale-105 border border-white/20 hover:border-blue-400/50 cursor-pointer">
+                      <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">Campus Lost & Found Portal</h3>
+                      <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+                        A web application that streamlines the process of reporting and retrieving lost items on campus. Built with React, Tailwind CSS, and Firebase, it enables students to log in via Google, post lost/found items with images, filter listings by date, contact item owners, and mark items as claimed — all in a secure and user-friendly interface.
+                      </p>
                     </div>
-                    <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
-                      A web application that streamlines the process of reporting and retrieving lost items on campus. Built with React, Tailwind CSS, and Firebase, it enables students to log in via Google, post lost/found items with images, filter listings by date, contact item owners, and mark items as claimed — all in a secure and user-friendly interface.
-                    </p>
-                  </div>
+                  </a>
                 </div>
 
                 {/* Project 3 */}
                 <div className="project-item opacity-0 transform translate-y-8 transition-all duration-1000 ease-out">
-                  <div className="bg-gray-900/70 backdrop-blur-sm rounded-xl p-4 sm:p-6 shadow-lg hover:shadow-blue-400/30 transition-all duration-300 hover:transform hover:scale-105 border border-white/20 hover:border-blue-400/50">
-                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">Discord Server Enhancement Bot</h3>
-                    <div className="bg-gray-600 rounded-lg h-32 sm:h-48 mb-4 flex items-center justify-center">
-                      <span className="text-gray-400 text-sm sm:text-lg">Project Image</span>
+                  <a href="https://github.com/Zimaad/zimaad-bot" target="_blank" rel="noopener noreferrer" className="block">
+                    <div className="bg-gray-900/70 backdrop-blur-sm rounded-xl p-4 sm:p-6 shadow-lg hover:shadow-blue-400/30 transition-all duration-300 hover:transform hover:scale-105 border border-white/20 hover:border-blue-400/50 cursor-pointer">
+                      <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">Discord Server Enhancement Bot</h3>
+                      <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+                        A versatile Discord bot that streamlines server administration with automated moderation, custom commands, role management, and server analytics. Includes features like welcome systems, logging, and interactive utilities to create engaging community experiences.
+                      </p>
                     </div>
-                    <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
-                      A versatile Discord bot that streamlines server administration with automated moderation, custom commands, role management, and server analytics. Includes features like welcome systems, logging, and interactive utilities to create engaging community experiences.
-                    </p>
-                  </div>
+                  </a>
                 </div>
               </div>
 
@@ -698,30 +695,28 @@ function App() {
                   <div className="w-1/2 pr-8"></div>
                   <div className="w-6 h-6 bg-blue-500 rounded-full border-4 border-white/30 relative z-10 flex-shrink-0 shadow-lg"></div>
                   <div className="w-1/2 pl-8">
-                    <div className="bg-gray-900/70 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-blue-400/30 transition-all duration-300 hover:transform hover:scale-105 border border-white/20 hover:border-blue-400/50">
-                      <h3 className="text-2xl font-bold text-white mb-4">AI-Powered Internal Order Management System</h3>
-                      <div className="bg-gray-600 rounded-lg h-48 mb-4 flex items-center justify-center">
-                        <span className="text-gray-400 text-lg">Project Image</span>
+                    <a href="https://www.linkedin.com/posts/zimaad_from-email-chaos-to-organized-intelligence-activity-7346246268031045632-bwOl?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAAE7JaLoBySqL47aM0xLgGoUkkiELOZ6jTYA" target="_blank" rel="noopener noreferrer" className="block">
+                      <div className="bg-gray-900/70 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-blue-400/30 transition-all duration-300 hover:transform hover:scale-105 border border-white/20 hover:border-blue-400/50 cursor-pointer">
+                        <h3 className="text-2xl font-bold text-white mb-4">AI-Powered Internal Order Management System</h3>
+                        <p className="text-gray-300 leading-relaxed">
+                          Built for UrbanTech Services LLP to streamline procurement and quotation workflows. The system uses Gemini API for AI-driven email summarization, integrates with Microsoft Graph API for secure email handling, and provides a centralized dashboard for real-time order tracking. Developed with React and Tailwind CSS for a clean, responsive interface, delivering faster decisions and improved operational efficiency.
+                        </p>
                       </div>
-                      <p className="text-gray-300 leading-relaxed">
-                        Built for UrbanTech Services LLP to streamline procurement and quotation workflows. The system uses Gemini API for AI-driven email summarization, integrates with Microsoft Graph API for secure email handling, and provides a centralized dashboard for real-time order tracking. Developed with React and Tailwind CSS for a clean, responsive interface, delivering faster decisions and improved operational efficiency.
-                      </p>
-                    </div>
+                    </a>
                   </div>
                 </div>
 
                 {/* Project 2 - Left Side */}
                 <div className="project-item project-2 flex items-center mb-20 opacity-0 transform -translate-x-16 translate-y-8 transition-all duration-1000 ease-out">
                   <div className="w-1/2 pr-8">
-                    <div className="bg-gray-900/70 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-blue-400/30 transition-all duration-300 hover:transform hover:scale-105 border border-white/20 hover:border-blue-400/50">
-                      <h3 className="text-2xl font-bold text-white mb-4">Campus Lost & Found Portal</h3>
-                      <div className="bg-gray-600 rounded-lg h-48 mb-4 flex items-center justify-center">
-                        <span className="text-gray-400 text-lg">Project Image</span>
+                    <a href="https://lostandfoundv2-cse6yjx0f-zimaad-azharis-projects.vercel.app/" target="_blank" rel="noopener noreferrer" className="block">
+                      <div className="bg-gray-900/70 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-blue-400/30 transition-all duration-300 hover:transform hover:scale-105 border border-white/20 hover:border-blue-400/50 cursor-pointer">
+                        <h3 className="text-2xl font-bold text-white mb-4">Campus Lost & Found Portal</h3>
+                        <p className="text-gray-300 leading-relaxed">
+                          A web application that streamlines the process of reporting and retrieving lost items on campus. Built with React, Tailwind CSS, and Firebase, it enables students to log in via Google, post lost/found items with images, filter listings by date, contact item owners, and mark items as claimed — all in a secure and user-friendly interface.
+                        </p>
                       </div>
-                      <p className="text-gray-300 leading-relaxed">
-                        A web application that streamlines the process of reporting and retrieving lost items on campus. Built with React, Tailwind CSS, and Firebase, it enables students to log in via Google, post lost/found items with images, filter listings by date, contact item owners, and mark items as claimed — all in a secure and user-friendly interface.
-                      </p>
-                    </div>
+                    </a>
                   </div>
                   <div className="w-6 h-6 bg-purple-500 rounded-full border-4 border-white/30 relative z-10 flex-shrink-0 shadow-lg"></div>
                   <div className="w-1/2 pl-8"></div>
@@ -732,15 +727,14 @@ function App() {
                   <div className="w-1/2 pr-8"></div>
                   <div className="w-6 h-6 bg-blue-500 rounded-full border-4 border-white/30 relative z-10 flex-shrink-0 shadow-lg"></div>
                   <div className="w-1/2 pl-8">
-                    <div className="bg-gray-900/70 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-blue-400/30 transition-all duration-300 hover:transform hover:scale-105 border border-white/20 hover:border-blue-400/50">
-                      <h3 className="text-2xl font-bold text-white mb-4">Discord Server Enhancement Bot</h3>
-                      <div className="bg-gray-600 rounded-lg h-48 mb-4 flex items-center justify-center">
-                        <span className="text-gray-400 text-lg">Project Image</span>
+                    <a href="https://github.com/Zimaad/zimaad-bot" target="_blank" rel="noopener noreferrer" className="block">
+                      <div className="bg-gray-900/70 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-blue-400/30 transition-all duration-300 hover:transform hover:scale-105 border border-white/20 hover:border-blue-400/50 cursor-pointer">
+                        <h3 className="text-2xl font-bold text-white mb-4">Discord Server Enhancement Bot</h3>
+                        <p className="text-gray-300 leading-relaxed">
+                          A versatile Discord bot that streamlines server administration with automated moderation, custom commands, role management, and server analytics. Includes features like welcome systems, logging, and interactive utilities to create engaging community experiences.
+                        </p>
                       </div>
-                      <p className="text-gray-300 leading-relaxed">
-                        A versatile Discord bot that streamlines server administration with automated moderation, custom commands, role management, and server analytics. Includes features like welcome systems, logging, and interactive utilities to create engaging community experiences.
-                      </p>
-                    </div>
+                    </a>
                   </div>
                 </div>
               </div>
