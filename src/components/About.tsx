@@ -35,7 +35,7 @@ export default function About() {
               </p>
               <div className="pt-6 space-y-4">
                 <h4 className="text-ink font-sans font-bold uppercase tracking-widest text-[10px]">Education</h4>
-                <p className="text-sm">B.Tech (Data Science) @ D.J. Sanghvi College | 2024–2028</p>
+                <p className="text-sm">B.Tech in CSE (Data Science) @ D.J. Sanghvi College | 2024–2028</p>
                 
                 <h4 className="text-ink font-sans font-bold uppercase tracking-widest text-[10px] pt-2">Key Achievements</h4>
                 <ul className="text-sm space-y-2">

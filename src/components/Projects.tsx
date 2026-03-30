@@ -16,11 +16,11 @@ const projects = [
     liveUrl: 'https://lostnfounddjsce.web.app/',
   },
   {
-    title: 'Developer Portfolio',
-    description: 'A minimalist, premium personal portfolio showcasing technical skillsets and project history with high-performance scroll-driven animations.',
-    techStack: ['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
+    title: 'Echonote',
+    description: 'AI-Powered Meeting Productivity Platform. Engineered a cross-platform automation engine with real-time transcription, speaker diarization, and automated Google Slides report generation.',
+    techStack: ['Next.js 15', 'Electron', 'Gemini AI', 'Whisper', 'Pyannote.audio'],
     githubUrl: '#',
-    liveUrl: 'https://zimsfolio.vercel.app/',
+    liveUrl: '#',
   },
 ];
 
