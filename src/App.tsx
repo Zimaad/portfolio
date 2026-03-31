@@ -6,10 +6,14 @@ import Skills from './components/Skills'
 import Projects from './components/Projects'
 import Experience from './components/Experience'
 import Contact from './components/Contact'
+import CustomCursor from './components/CustomCursor'
 
 export default function App() {
   return (
     <>
+      {/* Custom cursor — mix-blend-mode difference, desktop only */}
+      <CustomCursor />
+
       {/* Subtle film-grain noise overlay */}
       <div className="noise-overlay" aria-hidden="true" />
 
@@ -23,8 +27,8 @@ export default function App() {
         <Skills />
       </ScrollVideoDriver>
 
-      {/* Scene 2: Portfolio Storyboard */}
-      <ScrollVideoDriver videoSrc="/Firefly Floating Geometric Crystal_A low-poly abstract crystal or icosphere, glass-frosted material,.mp4">
+      {/* Scene 2: Portfolio Storyboard — video scrubs while projects carousel is scroll-locked */}
+      <ScrollVideoDriver videoSrc="/Firefly Floating Geometric Crystal_A low-poly abstract crystal or icosphere, glass-frosted material,.mp4" height="480vh">
         <Projects />
         <Experience />
         <Contact />

@@ -4,9 +4,10 @@ import { useScrollVideo } from '../hooks/useScrollVideo';
 interface ScrollVideoDriverProps {
   children: ReactNode;
   videoSrc: string;
+  height?: string;
 }
 
-export default function ScrollVideoDriver({ children, videoSrc }: ScrollVideoDriverProps) {
+export default function ScrollVideoDriver({ children, videoSrc, height = '425vh' }: ScrollVideoDriverProps) {
   {/*
     ┌─────────────────────────────────────────────────────────┐
     │  TODO: Change the video path below to your video.       │
@@ -20,7 +21,7 @@ export default function ScrollVideoDriver({ children, videoSrc }: ScrollVideoDri
     <div
       ref={scrollDriverRef}
       className="relative"
-      style={{ height: '425vh' }}
+      style={{ height }}
     >
       {/* Sticky canvas background — renders pre-extracted video frames */}
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-white" style={{ zIndex: 0 }}>

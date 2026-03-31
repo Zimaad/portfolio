@@ -33,6 +33,24 @@ body {
   color: var(--color-bone);
 }
 
+/* ── FOUC Guard for GSAP reveals ─────────────── */
+/* Elements with .reveal start hidden; GSAP's autoAlpha animates them in */
+.reveal {
+  visibility: hidden;
+}
+
+/* ── Custom Cursor ───────────────────────────── */
+/* Hide default cursor on desktop for custom cursor */
+@media (pointer: fine) {
+  body {
+    cursor: none;
+  }
+
+  a, button, [role="button"], .magnetic-btn {
+    cursor: none;
+  }
+}
+
 /* ── Scroll Indicator ────────────────────────── */
 
 @keyframes float {
@@ -48,21 +66,6 @@ body {
 
 .scroll-indicator {
   animation: float 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-}
-
-/* ── Reveal Animations (driven by IntersectionObserver) ── */
-
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition:
-    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 /* ── Noise Overlay (subtle film grain) ───────── */

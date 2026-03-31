@@ -1,28 +1,41 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+gsap.registerPlugin(ScrollTrigger);
+
+/**
+ * GSAP-powered scroll reveal hook.
+ * Replaces the old IntersectionObserver approach with ScrollTrigger.batch
+ * for staggered, buttery-smooth reveal animations.
+ */
 export function useReveal() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
+  useGSAP(() => {
+    if (!containerRef.current) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
+    const elements = gsap.utils.toArray<HTMLElement>('.reveal', containerRef.current);
+    if (elements.length === 0) return;
+
+    ScrollTrigger.batch(elements, {
+      onEnter: (batch) => {
+        gsap.fromTo(batch,
+          { autoAlpha: 0, y: 40 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 1.2,
+            stagger: 0.15,
+            ease: 'power3.out',
+            overwrite: true,
           }
-        });
+        );
       },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
-    );
-
-    const revealElements = container.querySelectorAll('.reveal');
-    revealElements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
+      start: 'top 88%',
+    });
+  }, { scope: containerRef });
 
   return containerRef;
 }

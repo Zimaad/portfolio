@@ -1,4 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useRef } from 'react';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const navLinks = [
   { label: 'About', href: '#about' },
@@ -9,22 +14,28 @@ const navLinks = [
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  // GSAP-powered hide on scroll down, show on scroll up
+  useGSAP(() => {
+    ScrollTrigger.create({
+      start: 'top top',
+      end: 'max',
+      onUpdate: (self) => {
+        if (self.direction === -1) {
+          gsap.to(navRef.current, { y: 0, duration: 0.4, ease: 'power2.out' });
+        } else if (self.scroll() > 100) {
+          gsap.to(navRef.current, { y: -100, duration: 0.3, ease: 'power2.in' });
+        }
+      },
+    });
+  });
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-40 transition-all duration-700 ${
-        scrolled
-          ? 'bg-bone/80 backdrop-blur-md border-b border-border'
-          : 'bg-transparent'
-      }`}
+      ref={navRef}
+      className="fixed top-0 left-0 w-full z-40 bg-bone/80 backdrop-blur-md border-b border-border"
       style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-16 md:h-20">

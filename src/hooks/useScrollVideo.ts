@@ -115,39 +115,73 @@ export function useScrollVideo(videoSources: string | string[]) {
     };
   }, [JSON.stringify(sources)]);
 
-  // Scroll-driven frame drawing
-  const drawFrame = useCallback(() => {
-    const scrollDriver = scrollDriverRef.current;
-    const canvas = canvasRef.current;
-    if (!scrollDriver || !canvas || frames.current.length === 0) return;
+  // Lerp-smoothed scroll-driven frame drawing
+  const targetFrame = useRef(0);
+  const smoothFrame = useRef(0);
+  const rafId = useRef(0);
+  const LERP_FACTOR = 0.08; // Lower = smoother/slower catch-up, higher = snappier
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+  // On scroll, update the target frame (cheap, no drawing)
+  const updateTarget = useCallback(() => {
+    const scrollDriver = scrollDriverRef.current;
+    if (!scrollDriver || frames.current.length === 0) return;
 
     const rect = scrollDriver.getBoundingClientRect();
     const total = scrollDriver.offsetHeight - window.innerHeight;
     const scrolled = Math.max(0, -rect.top);
     const progressVal = Math.min(scrolled / total, 1);
 
-    // Map scroll progress to target index based on total frames loaded
     const totalFrames = frames.current.length;
-    const targetIdx = Math.floor(progressVal * (totalFrames - 1));
-    const idx = Math.min(targetIdx, totalFrames - 1);
+    targetFrame.current = progressVal * (totalFrames - 1);
+  }, []);
+
+  // Persistent rAF loop: lerp smoothFrame toward targetFrame and draw
+  const tick = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || frames.current.length === 0) {
+      rafId.current = requestAnimationFrame(tick);
+      return;
+    }
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      rafId.current = requestAnimationFrame(tick);
+      return;
+    }
+
+    // Lerp toward target
+    smoothFrame.current += (targetFrame.current - smoothFrame.current) * LERP_FACTOR;
+
+    // Snap if very close (avoid endless micro-updates)
+    if (Math.abs(targetFrame.current - smoothFrame.current) < 0.05) {
+      smoothFrame.current = targetFrame.current;
+    }
+
+    const idx = Math.min(
+      Math.round(smoothFrame.current),
+      frames.current.length - 1
+    );
 
     if (idx !== currentFrameIdx.current && frames.current[idx]) {
       currentFrameIdx.current = idx;
       ctx.drawImage(frames.current[idx], 0, 0);
     }
+
+    rafId.current = requestAnimationFrame(tick);
   }, []);
 
   useEffect(() => {
     if (loading) return;
 
-    window.addEventListener('scroll', drawFrame, { passive: true });
-    drawFrame();
+    window.addEventListener('scroll', updateTarget, { passive: true });
+    updateTarget();
+    rafId.current = requestAnimationFrame(tick);
 
-    return () => window.removeEventListener('scroll', drawFrame);
-  }, [loading, drawFrame]);
+    return () => {
+      window.removeEventListener('scroll', updateTarget);
+      cancelAnimationFrame(rafId.current);
+    };
+  }, [loading, updateTarget, tick]);
 
   return { scrollDriverRef, canvasRef, loading, progress };
 }

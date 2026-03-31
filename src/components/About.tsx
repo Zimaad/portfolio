@@ -1,7 +1,29 @@
+import { useRef } from 'react';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useReveal } from '../hooks/useReveal';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function About() {
   const revealRef = useReveal();
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  // Parallax effect on the profile image
+  useGSAP(() => {
+    if (!imgRef.current) return;
+    gsap.to(imgRef.current, {
+      y: -60,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: imgRef.current,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: true,
+      },
+    });
+  });
 
   return (
     <section
@@ -23,7 +45,6 @@ export default function About() {
           {/* Left: Bio */}
           <div className="reveal">
             <h2 className="font-serif text-4xl md:text-5xl text-ink leading-tight tracking-tight mb-8">
-              {/* ABOUT HEADING — e.g. "A few words about me" */}
               A few words about me
             </h2>
             <div className="space-y-5 text-muted text-base md:text-lg leading-relaxed font-light">
@@ -41,15 +62,15 @@ export default function About() {
                 <ul className="text-sm space-y-2">
                   <li>• 1st Place at HackOps 2025 (DJS NSDC)</li>
                   <li>• Web/App Domain Winner at LOC 8.0 (DJS ACM)</li>
-                  <li>• Rank 54 in Code UnCode 2025 (SPIT)</li>
                 </ul>
               </div>
             </div>
           </div>
 
-          {/* Right: Modern Vector Art - Naturally Blended */}
+          {/* Right: Profile art with parallax */}
           <div className="reveal flex items-center justify-center md:justify-end">
             <img 
+              ref={imgRef}
               src="/profile_art.png" 
               alt="Vector Art" 
               className="w-full max-w-lg h-auto mix-blend-multiply opacity-80"

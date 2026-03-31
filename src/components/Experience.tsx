@@ -1,5 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+import { useRef } from 'react';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useReveal } from '../hooks/useReveal';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const experiences = [
   {
@@ -27,26 +32,56 @@ const experiences = [
 export default function Experience() {
   const revealRef = useReveal();
   const timelineRef = useRef<HTMLDivElement>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!timelineRef.current) return;
-      const rect = timelineRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      
-      // Calculate how far the timeline has crossed the center point of the screen
-      const startTrigger = rect.top - windowHeight * 0.5;
-      const totalHeight = rect.height;
-      const progress = Math.min(Math.max(-startTrigger / totalHeight, 0), 1);
-      
-      setScrollProgress(progress * 100);
-    };
+  useGSAP(() => {
+    if (!timelineRef.current) return;
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Initial check
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    // Scrub-animate the timeline progress line
+    gsap.fromTo('.timeline-progress',
+      { height: '0%' },
+      {
+        height: '100%',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: timelineRef.current,
+          start: 'top center',
+          end: 'bottom center',
+          scrub: 0.5,
+        },
+      }
+    );
+
+    // Animate each dot's border when scroll reaches it
+    gsap.utils.toArray<HTMLElement>('.timeline-dot').forEach((dot) => {
+      gsap.to(dot, {
+        borderColor: 'var(--color-ink)',
+        duration: 0.3,
+        scrollTrigger: {
+          trigger: dot,
+          start: 'top center',
+          toggleActions: 'play none none reverse',
+        },
+      });
+    });
+
+    // Stagger each experience entry from the left
+    gsap.utils.toArray<HTMLElement>('.timeline-entry').forEach((entry) => {
+      gsap.fromTo(entry,
+        { autoAlpha: 0, x: -30 },
+        {
+          autoAlpha: 1,
+          x: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: entry,
+            start: 'top 82%',
+            toggleActions: 'play none none none',
+          },
+        }
+      );
+    });
+  });
 
   return (
     <section id="experience" ref={revealRef} className="py-32 md:py-40 px-6 md:px-12 bg-transparent">
@@ -70,33 +105,26 @@ export default function Experience() {
             style={{ left: '8px' }}
           />
 
-          {/* Vertical line - Animated Progress (Black) */}
+          {/* Vertical line - Animated Progress (Black) — GSAP scrub-driven */}
           <div
-            className="absolute top-2 w-px bg-ink transition-all duration-150 ease-out"
-            style={{ 
-              left: '8px', 
-              height: `${scrollProgress}%`,
-              opacity: scrollProgress > 0 ? 1 : 0 
-            }}
+            className="timeline-progress absolute top-2 w-px bg-ink"
+            style={{ left: '8px', height: '0%' }}
           />
 
           <div className="space-y-14">
             {experiences.map((exp, index) => (
               <div
                 key={index}
-                className="reveal relative pl-10 md:pl-12"
-                style={{ transitionDelay: `${index * 120}ms` }}
+                className="timeline-entry relative pl-10 md:pl-12"
+                style={{ visibility: 'hidden' }}
               >
                 {/* Timeline dot */}
                 <div
-                  className="absolute top-1.5 w-[17px] h-[17px] rounded-full border-2 border-border bg-bone z-10"
-                  style={{ 
-                    left: '0px',
-                    borderColor: scrollProgress > (index / experiences.length) * 100 + 5 ? 'var(--color-ink)' : 'var(--color-border)'
-                  }}
+                  className="timeline-dot absolute top-1.5 w-[17px] h-[17px] rounded-full border-2 border-border bg-bone z-10"
+                  style={{ left: '0px' }}
                 />
 
-                <div className="transition-all duration-500">
+                <div>
                   {/* Date */}
                   <p
                     className="text-muted font-medium mb-1.5"
@@ -132,16 +160,10 @@ export default function Experience() {
             ))}
 
             {/* Final Closing Dot */}
-            <div 
-              className="reveal relative pl-10 md:pl-12 pt-4"
-              style={{ transitionDelay: `${experiences.length * 120}ms` }}
-            >
+            <div className="relative pl-10 md:pl-12 pt-4">
               <div
-                className="absolute top-1.5 w-[17px] h-[17px] rounded-full border-2 border-border bg-bone z-10"
-                style={{ 
-                  left: '0px',
-                  borderColor: scrollProgress >= 100 ? 'var(--color-ink)' : 'var(--color-border)'
-                }}
+                className="timeline-dot absolute top-1.5 w-[17px] h-[17px] rounded-full border-2 border-border bg-bone z-10"
+                style={{ left: '0px' }}
               />
             </div>
           </div>
