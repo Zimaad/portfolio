@@ -22,45 +22,54 @@ export default function CustomCursor() {
       return;
     }
 
+    // Hide initially until first move
+    gsap.set([dot, ring], { opacity: 0 });
+
     const moveCursor = (e: MouseEvent) => {
       gsap.to(dot, {
         x: e.clientX,
         y: e.clientY,
-        duration: 0.12,
+        xPercent: -50,
+        yPercent: -50,
+        opacity: 1,
+        duration: 0.15,
         ease: 'power2.out',
       });
       gsap.to(ring, {
         x: e.clientX,
         y: e.clientY,
-        duration: 0.45,
+        xPercent: -50,
+        yPercent: -50,
+        opacity: 1,
+        duration: 0.5,
         ease: 'power3.out',
       });
     };
 
-    const grow = () => {
-      gsap.to(ring, { scale: 2.5, opacity: 0.6, duration: 0.3, ease: 'power2.out' });
-      gsap.to(dot, { scale: 0, duration: 0.2 });
+    const handleEnter = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('a, button, [role="button"], .magnetic-btn, .progress-dot')) {
+        gsap.to(ring, { scale: 1.8, opacity: 0.5, duration: 0.4, ease: 'power2.out' });
+        gsap.to(dot, { scale: 0, duration: 0.3 });
+      }
     };
 
-    const shrink = () => {
-      gsap.to(ring, { scale: 1, opacity: 1, duration: 0.3, ease: 'power2.out' });
-      gsap.to(dot, { scale: 1, duration: 0.2 });
+    const handleLeave = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('a, button, [role="button"], .magnetic-btn, .progress-dot')) {
+        gsap.to(ring, { scale: 1, opacity: 1, duration: 0.4, ease: 'power2.out' });
+        gsap.to(dot, { scale: 1, duration: 0.3 });
+      }
     };
 
     window.addEventListener('mousemove', moveCursor);
-
-    const interactives = document.querySelectorAll('a, button, [role="button"], .magnetic-btn');
-    interactives.forEach((el) => {
-      el.addEventListener('mouseenter', grow);
-      el.addEventListener('mouseleave', shrink);
-    });
+    window.addEventListener('mouseover', handleEnter);
+    window.addEventListener('mouseout', handleLeave);
 
     return () => {
       window.removeEventListener('mousemove', moveCursor);
-      interactives.forEach((el) => {
-        el.removeEventListener('mouseenter', grow);
-        el.removeEventListener('mouseleave', shrink);
-      });
+      window.removeEventListener('mouseover', handleEnter);
+      window.removeEventListener('mouseout', handleLeave);
     };
   }, []);
 
@@ -72,7 +81,23 @@ export default function CustomCursor() {
         style={{
           width: 8,
           height: 8,
-          background: '#fff',
+          background: '#FFFFFF',
+          borderRadius: '50%',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          pointerEvents: 'none',
+          mixBlendMode: 'difference',
+          zIndex: 10000,
+        }}
+      />
+      <div
+        ref={ringRef}
+        className="cursor-ring"
+        style={{
+          width: 32,
+          height: 32,
+          border: '1.2px solid rgba(255,255,255,0.7)',
           borderRadius: '50%',
           position: 'fixed',
           top: 0,
@@ -80,24 +105,6 @@ export default function CustomCursor() {
           pointerEvents: 'none',
           mixBlendMode: 'difference',
           zIndex: 9999,
-          transform: 'translate(-50%, -50%)',
-        }}
-      />
-      <div
-        ref={ringRef}
-        className="cursor-ring"
-        style={{
-          width: 36,
-          height: 36,
-          border: '1.5px solid rgba(255,255,255,0.5)',
-          borderRadius: '50%',
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          pointerEvents: 'none',
-          mixBlendMode: 'difference',
-          zIndex: 9998,
-          transform: 'translate(-50%, -50%)',
         }}
       />
     </>

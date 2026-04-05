@@ -1,29 +1,7 @@
-import { useRef } from 'react';
-import { useGSAP } from '@gsap/react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useReveal } from '../hooks/useReveal';
-
-gsap.registerPlugin(ScrollTrigger);
 
 export default function About() {
   const revealRef = useReveal();
-  const imgRef = useRef<HTMLImageElement>(null);
-
-  // Parallax effect on the profile image
-  useGSAP(() => {
-    if (!imgRef.current) return;
-    gsap.to(imgRef.current, {
-      y: -60,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: imgRef.current,
-        start: 'top bottom',
-        end: 'bottom top',
-        scrub: true,
-      },
-    });
-  });
 
   return (
     <section
@@ -41,8 +19,8 @@ export default function About() {
           About
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
-          {/* Left: Bio */}
+        <div className="max-w-3xl">
+          {/* Bio */}
           <div className="reveal">
             <h2 className="font-serif text-4xl md:text-5xl text-ink leading-tight tracking-tight mb-8">
               A few words about me
@@ -65,17 +43,6 @@ export default function About() {
                 </ul>
               </div>
             </div>
-          </div>
-
-          {/* Right: Profile art with parallax */}
-          <div className="reveal flex items-center justify-center md:justify-end">
-            <img 
-              ref={imgRef}
-              src="/profile_art.png" 
-              alt="Vector Art" 
-              className="w-full max-w-lg h-auto mix-blend-multiply opacity-80"
-              style={{ filter: 'grayscale(0.2) contrast(1.1)' }}
-            />
           </div>
         </div>
       </div>

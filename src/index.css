@@ -17,15 +17,28 @@
 
 html {
   scroll-behavior: smooth;
+  /* Prevent horizontal scroll on mobile */
+  overflow-x: hidden;
+  width: 100%;
 }
 
 body {
   font-family: var(--font-family-sans);
   background-color: var(--color-bone);
   color: var(--color-ink);
-  line-height: 1.6;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* ── Typography Responsive ───────────────────── */
+
+@media (max-width: 640px) {
+  :root {
+    font-size: 14px; /* Slightly smaller base font on mobile */
+  }
 }
 
 ::selection {
@@ -48,6 +61,13 @@ body {
 
   a, button, [role="button"], .magnetic-btn {
     cursor: none;
+  }
+}
+
+/* On touch devices, ensure elements are reachable and not hidden by custom cursor logic */
+@media (pointer: coarse) {
+  body {
+    cursor: auto !important;
   }
 }
 
@@ -84,7 +104,7 @@ body {
 /* ── Custom Scrollbar ────────────────────────── */
 
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-track {
@@ -93,9 +113,20 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: #d1cec9;
-  border-radius: 3px;
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #b5b2ad;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera when locked or in some mobile contexts */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }

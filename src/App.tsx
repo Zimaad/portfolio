@@ -1,5 +1,4 @@
 import Navbar from './components/Navbar'
-import ScrollVideoDriver from './components/ScrollVideoDriver'
 import Hero from './components/Hero'
 import About from './components/About'
 import Skills from './components/Skills'
@@ -7,6 +6,7 @@ import Projects from './components/Projects'
 import Experience from './components/Experience'
 import Contact from './components/Contact'
 import CustomCursor from './components/CustomCursor'
+import BackgroundVideo from './components/BackgroundVideo'
 
 export default function App() {
   return (
@@ -17,22 +17,20 @@ export default function App() {
       {/* Subtle film-grain noise overlay */}
       <div className="noise-overlay" aria-hidden="true" />
 
+      {/* Always-playing Video Background */}
+      <BackgroundVideo videoSrc="/Firefly Floating Geometric Crystal_A low-poly abstract crystal or icosphere, glass-frosted material,.mp4" />
+
       {/* Navigation */}
       <Navbar />
 
-      {/* Scene 1: Introduction Storyboard */}
-      <ScrollVideoDriver videoSrc="/8597294-hd_1920_1080_30fps.mp4">
+      <main className="relative z-10 w-full overflow-x-hidden">
         <Hero />
         <About />
         <Skills />
-      </ScrollVideoDriver>
-
-      {/* Scene 2: Portfolio Storyboard — video scrubs while projects carousel is scroll-locked */}
-      <ScrollVideoDriver videoSrc="/Firefly Floating Geometric Crystal_A low-poly abstract crystal or icosphere, glass-frosted material,.mp4" height="480vh">
         <Projects />
         <Experience />
         <Contact />
-      </ScrollVideoDriver>
+      </main>
     </>
   )
 }

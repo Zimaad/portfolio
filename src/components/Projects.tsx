@@ -7,6 +7,14 @@ gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {
+    title: 'Hiatus',
+    description:
+      'Multi-agent research intelligence platform that autonomously identifies structural gaps in academic literature. Built with a LangGraph-orchestrated neural core to crawl, analyze, and synthesize complex research clusters.',
+    techStack: ['Next.js 16', 'LangGraph', 'FastAPI', 'Llama 3.3', 'Firebase', 'Tailwind v4'],
+    githubUrl: '#',
+    liveUrl: '#',
+  },
+  {
     title: 'CodeLens',
     description:
       'AI Codebase Visualization & Chat Platform. Architected a repository analysis tool with an interactive D3.js dependency graph and real-time AI code intelligence.',
@@ -15,17 +23,9 @@ const projects = [
     liveUrl: 'https://codelens-two.vercel.app/#',
   },
   {
-    title: 'Lost & Found',
-    description:
-      'A full-stack web application enabling students to easily post, search, and manage lost and found items within a secure campus environment.',
-    techStack: ['HTML', 'JavaScript', 'Firebase', 'CSS'],
-    githubUrl: 'https://github.com/Zimaad/lostandfoundv2',
-    liveUrl: 'https://lostnfounddjsce.web.app/',
-  },
-  {
     title: 'Echonote',
     description:
-      'AI-Powered Meeting Productivity Platform. Engineered a cross-platform automation engine with real-time transcription, speaker diarization, and automated Google Slides report generation.',
+      'AI-Powered Meeting Productivity Platform. Engineered a cross-platform automation engine with real-time transcription, speaker diarization, and automated report generation.',
     techStack: ['Next.js 15', 'Electron', 'Gemini AI', 'Whisper', 'Pyannote.audio'],
     githubUrl: '#',
     liveUrl: '#',
@@ -132,25 +132,32 @@ export default function Projects() {
     );
   }, { scope: sectionRef });
 
-  // Scroll-lock + wheel-driven carousel
+  // Scroll-lock + wheel-driven carousel + mobile touch support
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
+
+    let touchStartY = 0;
 
     const lock = () => {
       if (isLockedRef.current || cooldownRef.current) return;
       // Snap section to viewport top
       const top = section.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top, behavior: 'auto' });
+      window.scrollTo({ top, behavior: 'smooth' });
       isLockedRef.current = true;
       scrollAccRef.current = 0;
       document.documentElement.style.overflow = 'hidden';
+      // On mobile, also disable body scroll
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
     };
 
     const unlock = () => {
       if (!isLockedRef.current) return;
       isLockedRef.current = false;
       document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
       cooldownRef.current = true;
       setTimeout(() => { cooldownRef.current = false; }, 800);
     };
@@ -158,17 +165,18 @@ export default function Projects() {
     // Detect when section enters viewport
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.6 && !cooldownRef.current) {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.5 && !cooldownRef.current) {
           const scrollingDown = window.scrollY >= lastScrollY.current;
-          if (scrollingDown) {
+          if (scrollingDown && activeIndexRef.current === 0) {
             resetToSlide(0);
-          } else {
+            lock();
+          } else if (!scrollingDown && activeIndexRef.current === projects.length - 1) {
             resetToSlide(projects.length - 1);
+            lock();
           }
-          lock();
         }
       },
-      { threshold: [0.6] }
+      { threshold: [0.5] }
     );
     observer.observe(section);
 
@@ -200,14 +208,53 @@ export default function Projects() {
       }
     };
 
+    // Mobile touch events
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isLockedRef.current) return;
+      e.preventDefault();
+      if (isAnimatingRef.current) return;
+
+      const touchY = e.touches[0].clientY;
+      const deltaY = touchStartY - touchY;
+
+      // Only respond to vertical swipes or primary delta
+      if (Math.abs(deltaY) > 30) {
+        if (deltaY > SCROLL_THRESHOLD) {
+          if (activeIndexRef.current < projects.length - 1) {
+            goToSlide(activeIndexRef.current + 1, 'next');
+          } else {
+            unlock();
+          }
+          touchStartY = touchY; // Reset to avoid double triggers
+        } else if (deltaY < -SCROLL_THRESHOLD) {
+          if (activeIndexRef.current > 0) {
+            goToSlide(activeIndexRef.current - 1, 'prev');
+          } else {
+            unlock();
+          }
+          touchStartY = touchY;
+        }
+      }
+    };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
 
     return () => {
       observer.disconnect();
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
       document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
     };
   }, [goToSlide, resetToSlide]);
 
@@ -215,7 +262,7 @@ export default function Projects() {
     <section
       id="projects"
       ref={sectionRef}
-      className="h-screen bg-transparent flex flex-col justify-center items-center px-6 md:px-12"
+      className="min-h-[100dvh] bg-transparent flex flex-col justify-center items-center px-6 md:px-12 py-20"
     >
       {/* Header row */}
       <div className="projects-header w-full max-w-3xl flex items-end justify-between mb-12" style={{ visibility: 'hidden' }}>
@@ -233,71 +280,101 @@ export default function Projects() {
 
       </div>
 
-      {/* Carousel container — overflow hidden clips sliding cards */}
-      <div className="relative w-full max-w-3xl overflow-hidden" style={{ minHeight: '340px' }}>
-        {projects.map((project, i) => (
-          <div key={i} className="project-slide absolute inset-0 flex items-center">
-            <div className="w-full border border-border rounded-2xl p-8 md:p-10 bg-bone/50 backdrop-blur-sm relative overflow-hidden">
+      {/* Carousel Wrapper — no overflow-hidden so arrows can hang off the sides */}
+      <div className="relative w-full max-w-3xl min-h-[480px] md:min-h-[400px]">
+        {/* Navigation Arrows */}
+        <button
+          onClick={() => {
+            const prevIdx = activeIndexRef.current > 0 ? activeIndexRef.current - 1 : projects.length - 1;
+            goToSlide(prevIdx, 'prev');
+          }}
+          className="absolute left-[-20px] md:left-[-60px] top-1/2 -translate-y-1/2 z-30 w-12 h-12 flex items-center justify-center rounded-full border border-border text-muted hover:text-ink hover:border-ink transition-all duration-400 bg-bone/80 backdrop-blur-md opacity-60 hover:opacity-100 shadow-sm"
+          aria-label="Previous project"
+        >
+          <span className="text-xl md:text-2xl">&#8592;</span>
+        </button>
+        <button
+          onClick={() => {
+            const nextIdx = activeIndexRef.current < projects.length - 1 ? activeIndexRef.current + 1 : 0;
+            goToSlide(nextIdx, 'next');
+          }}
+          className="absolute right-[-20px] md:right-[-60px] top-1/2 -translate-y-1/2 z-30 w-12 h-12 flex items-center justify-center rounded-full border border-border text-muted hover:text-ink hover:border-ink transition-all duration-400 bg-bone/80 backdrop-blur-md opacity-60 hover:opacity-100 shadow-sm"
+          aria-label="Next project"
+        >
+          <span className="text-xl md:text-2xl">&#8594;</span>
+        </button>
 
+        {/* Clipped Slides Container — specifically for the sliding animation */}
+        <div className="absolute inset-0 overflow-hidden rounded-2xl border border-border bg-bone/40 backdrop-blur-sm group">
+          {projects.map((project, i) => (
+            <div key={i} className="project-slide absolute inset-0 flex items-center">
+              <div className="w-full h-full p-8 md:p-10 flex flex-col justify-center">
+                <h3 className="font-serif text-3xl md:text-4xl text-ink mb-4 leading-snug">
+                  {project.title}
+                </h3>
 
-              <h3 className="font-serif text-3xl md:text-4xl text-ink mb-4 leading-snug">
-                {project.title}
-              </h3>
+                <p className="text-muted text-base md:text-lg leading-relaxed mb-8 max-w-xl font-light">
+                  {project.description}
+                </p>
 
-              <p className="text-muted text-base md:text-lg leading-relaxed mb-8 max-w-xl font-light">
-                {project.description}
-              </p>
+                <div className="flex flex-wrap gap-2 mb-8">
+                  {project.techStack.map((tech) => (
+                    <span
+                      key={tech}
+                      className="text-accent bg-accent-light px-3 py-1.5 rounded-full font-medium"
+                      style={{ fontSize: '10px', letterSpacing: '0.05em', textTransform: 'uppercase' }}
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
 
-              <div className="flex flex-wrap gap-2 mb-8">
-                {project.techStack.map((tech) => (
-                  <span
-                    key={tech}
-                    className="text-accent bg-accent-light px-3 py-1.5 rounded-full font-medium"
-                    style={{ fontSize: '10px', letterSpacing: '0.05em', textTransform: 'uppercase' }}
+                <div className="flex items-center gap-6">
+                  <a
+                    href={project.githubUrl}
+                    className="text-muted hover:text-ink transition-colors duration-300 inline-flex items-center gap-1.5 group"
+                    style={{ fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 500 }}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-
-              <div className="flex items-center gap-6">
-                <a
-                  href={project.githubUrl}
-                  className="text-muted hover:text-ink transition-colors duration-300 inline-flex items-center gap-1.5 group"
-                  style={{ fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 500 }}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  GitHub
-                  <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5">&#8599;</span>
-                </a>
-                <a
-                  href={project.liveUrl}
-                  className="text-muted hover:text-ink transition-colors duration-300 inline-flex items-center gap-1.5 group"
-                  style={{ fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 500 }}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Live
-                  <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5">&#8599;</span>
-                </a>
+                    GitHub
+                    <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5">&#8599;</span>
+                  </a>
+                  <a
+                    href={project.liveUrl}
+                    className="text-muted hover:text-ink transition-colors duration-300 inline-flex items-center gap-1.5 group"
+                    style={{ fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 500 }}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Live
+                    <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5">&#8599;</span>
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* Progress dots */}
-      <div className="flex gap-3 mt-10">
+      <div className="flex gap-4 mt-10">
         {projects.map((_, i) => (
-          <div
+          <button
             key={i}
-            className="progress-dot rounded-full"
-            style={{
-              width: 8,
-              height: 8,
-              backgroundColor: i === 0 ? 'var(--color-ink)' : 'var(--color-border)',
+            onClick={() => {
+              if (i === activeIndexRef.current || isAnimatingRef.current) return;
+              goToSlide(i, i > activeIndexRef.current ? 'next' : 'prev');
             }}
+            className="progress-dot rounded-full transition-all duration-300 cursor-pointer"
+            style={{
+              width: 10,
+              height: 10,
+              padding: 0,
+              border: 'none',
+              backgroundColor: i === activeIndexRef.current ? 'var(--color-ink)' : 'var(--color-border)',
+            }}
+            aria-label={`Go to project ${i + 1}`}
           />
         ))}
       </div>
