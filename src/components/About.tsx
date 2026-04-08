@@ -1,49 +1,17 @@
-import { useReveal } from '../hooks/useReveal';
-
 export default function About() {
-  const revealRef = useReveal();
-
   return (
-    <section
-      id="about"
-      ref={revealRef}
-      className="relative py-32 md:py-40 px-6 md:px-12"
-      style={{ background: 'transparent' }}
-    >
-      <div className="max-w-6xl mx-auto">
-        {/* Section label */}
-        <p
-          className="reveal text-muted font-medium mb-12"
-          style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase' }}
-        >
-          About
-        </p>
-
-        <div className="max-w-3xl">
-          {/* Bio */}
-          <div className="reveal">
-            <h2 className="font-serif text-4xl md:text-5xl text-ink leading-tight tracking-tight mb-8">
-              A few words about me
-            </h2>
-            <div className="space-y-5 text-muted text-base md:text-lg leading-relaxed font-light">
-              <p>
-                I am a B.Tech student in Computer Science (Data Science) with an Honors in Finance at Dwarkadas J. Sanghvi College of Engineering, Mumbai. My journey is driven by a passion for building scalable, AI-integrated applications that solve real-world problems.
-              </p>
-              <p>
-                From architecting codebase visualization platforms to automating procurement workflows for enterprises, I focus on creating high-performance, user-centric solutions. I am particularly interested in the intersection of full-stack development, AI engineering, and fintech.
-              </p>
-              <div className="pt-6 space-y-4">
-                <h4 className="text-ink font-sans font-bold uppercase tracking-widest text-[10px]">Education</h4>
-                <p className="text-sm">B.Tech in CSE (Data Science) @ D.J. Sanghvi College | 2024–2028</p>
-                
-                <h4 className="text-ink font-sans font-bold uppercase tracking-widest text-[10px] pt-2">Key Achievements</h4>
-                <ul className="text-sm space-y-2">
-                  <li>• 1st Place at HackOps 2025 (DJS NSDC)</li>
-                  <li>• Web/App Domain Winner at LOC 8.0 (DJS ACM)</li>
-                </ul>
-              </div>
-            </div>
-          </div>
+    <section id="about" className="py-40 px-10 bg-surface">
+      <div className="max-w-screen-xl mx-auto grid md:grid-cols-12 gap-10">
+        <div className="md:col-span-8">
+          <p className="geist text-[10px] tracking-[0.2em] text-primary mb-8">01 — PHILOSOPHY</p>
+          <h2 className="cormorant text-5xl md:text-7xl leading-tight text-on-surface">
+            Bridging the gap between <span className="italic text-outline">sensory aesthetics</span> and rigorous engineering through intentional, high-performance code.
+          </h2>
+        </div>
+        <div className="md:col-span-4 flex items-end">
+          <p className="manrope text-on-surface-variant font-light leading-relaxed">
+            I specialize in creating immersive digital environments where every pixel serves a purpose and every line of code is optimized for the future. My approach is holistic: from the architectural foundation to the microscopic details of user interaction.
+          </p>
         </div>
       </div>
     </section>

@@ -1,91 +1,164 @@
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-const nameText = 'Zimaad Azhari';
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
+  const videoWrapRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const hasPlayedRef = useRef(false);
 
   useGSAP(() => {
-    const tl = gsap.timeline({ delay: 0.4 });
+    const section = heroRef.current;
+    const videoWrap = videoWrapRef.current;
+    if (!section || !videoWrap) return;
 
-    // Eyebrow
-    tl.fromTo('.hero-eyebrow',
-      { autoAlpha: 0, y: 20 },
-      { autoAlpha: 1, y: 0, duration: 0.8, ease: 'power3.out' }
-    );
+    /* ─── Entry: just fade in the text ─── */
+    const entryTl = gsap.timeline({ delay: 0.2 });
 
-    // Name characters slide up from overflow-hidden mask
-    tl.fromTo('.hero-char',
+    entryTl.fromTo('.hero-line',
       { y: '110%' },
-      { y: '0%', duration: 0.7, stagger: 0.035, ease: 'expo.out' },
-      '-=0.3'
+      { y: '0%', duration: 1.2, stagger: 0.14, ease: 'expo.out' }
     );
 
-    // Tagline
-    tl.fromTo('.hero-tagline',
-      { autoAlpha: 0, y: 30 },
-      { autoAlpha: 1, y: 0, duration: 1, ease: 'power3.out' },
-      '-=0.4'
-    );
-
-    // Description
-    tl.fromTo('.hero-desc',
-      { autoAlpha: 0, y: 20 },
-      { autoAlpha: 1, y: 0, duration: 0.8, ease: 'power3.out' },
+    entryTl.fromTo('.hero-tagline',
+      { autoAlpha: 0, y: 12 },
+      { autoAlpha: 0.5, y: 0, duration: 1.4, ease: 'power2.out' },
       '-=0.6'
     );
-  }, { scope: heroRef });
 
-  const words = nameText.split(' ');
+    entryTl.fromTo('.hero-scroll',
+      { autoAlpha: 0 },
+      { autoAlpha: 0.35, duration: 1, ease: 'power2.out' },
+      '-=0.8'
+    );
+
+    /* ─── Scroll-driven porthole → fullscreen ─── */
+    const scrollTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: 'top top',
+        end: '+=450%',
+        pin: true,
+        scrub: 0.6,
+        anticipatePin: 1,
+        onUpdate: () => {
+          // Start playing the video on first scroll interaction
+          if (!hasPlayedRef.current && videoRef.current) {
+            hasPlayedRef.current = true;  // flip BEFORE play so blocker lets it through
+            videoRef.current.play();
+          }
+        },
+      },
+    });
+
+    // Fade out text as scroll begins
+    scrollTl.to('.hero-content', {
+      opacity: 0,
+      y: -60,
+      duration: 0.3,
+      ease: 'power2.in',
+    }, 0);
+
+    scrollTl.to('.hero-scroll', {
+      autoAlpha: 0,
+      duration: 0.1,
+    }, 0);
+
+    // Expand clip-path from porthole to full viewport
+    scrollTl.to(videoWrap, {
+      clipPath: 'circle(100% at 51% 46%)',
+      duration: 1,
+      ease: 'none',
+    }, 0);
+
+    // Subtle cinematic zoom once nearly open
+    scrollTl.fromTo('.hero-video',
+      { scale: 1 },
+      { scale: 1.06, duration: 0.3, ease: 'none' },
+      0.7
+    );
+
+  }, { scope: heroRef });
 
   return (
     <section
-      id="hero"
       ref={heroRef}
-      className="relative flex flex-col justify-center px-6 md:px-12"
-      style={{ minHeight: '100dvh', background: 'transparent' }}
+      className="relative h-screen overflow-hidden bg-[#050508]"
     >
-      <div className="max-w-6xl mx-auto w-full pt-24">
-        {/* Eyebrow */}
-        <p
-          className="hero-eyebrow text-muted mb-6 font-sans font-medium"
-          style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', visibility: 'hidden' }}
-        >
-          Designer &amp; Developer
-        </p>
+      {/* ── Video with clip-path porthole — visible immediately ── */}
+      <div
+        ref={videoWrapRef}
+        className="absolute inset-0 z-0"
+        style={{ clipPath: 'circle(15.5% at 51% 46%)' }}
+      >
+        <video
+          ref={videoRef}
+          className="hero-video w-full h-full object-cover"
+          src="/bg.mp4"
+          muted
+          playsInline
+          preload="auto"
+          style={{
+            filter: 'contrast(1.12) brightness(1.05) saturate(1.1)',
+            imageRendering: 'auto',
+            WebkitBackfaceVisibility: 'hidden',
+            backfaceVisibility: 'hidden',
+          }}
+        />
+      </div>
 
-        {/* Main heading — character-split animation */}
-        <h1 className="font-serif text-ink leading-none tracking-tight mb-8 text-5xl sm:text-7xl md:text-8xl lg:text-[7rem]">
-          {words.map((word, wIdx) => (
-            <span key={wIdx} style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>
-              {word.split('').map((char, cIdx) => (
-                <span
-                  key={cIdx}
-                  style={{ display: 'inline-block', overflow: 'hidden', verticalAlign: 'bottom' }}
-                >
-                  <span className="hero-char" style={{ display: 'inline-block' }}>
-                    {char}
-                  </span>
-                </span>
-              ))}
-              {wIdx < words.length - 1 && <span>&nbsp;</span>}
+      {/* ── Minimal hero text ── */}
+      <div
+        className="hero-content relative z-10 flex flex-col justify-end px-6 md:px-14 pb-24 md:pb-32"
+        style={{ minHeight: '100dvh' }}
+      >
+        <div className="max-w-screen-xl mx-auto w-full">
+          {/* Name — massive, left-aligned */}
+          <h1
+            className="cormorant text-white mb-6"
+            style={{
+              fontSize: 'clamp(3.5rem, 11vw, 13rem)',
+              lineHeight: '0.88',
+              letterSpacing: '-0.03em',
+              fontWeight: 300,
+            }}
+          >
+            <span style={{ display: 'block', overflow: 'hidden' }}>
+              <span className="hero-line" style={{ display: 'block' }}>
+                Zimaad
+              </span>
             </span>
-          ))}
-          <br />
-          <span className="hero-tagline text-muted italic" style={{ visibility: 'hidden' }}>
-            Architecting and building scalable software.
-          </span>
-        </h1>
+            <span style={{ display: 'block', overflow: 'hidden' }}>
+              <span className="hero-line italic text-on-surface-variant/50" style={{ display: 'block' }}>
+                Azhari
+              </span>
+            </span>
+          </h1>
 
-        {/* Short intro */}
-        <p
-          className="hero-desc text-muted text-lg md:text-xl max-w-xl leading-relaxed font-light"
-          style={{ visibility: 'hidden' }}
+          {/* One evocative tagline */}
+          <p
+            className="hero-tagline geist text-on-surface-variant/60 uppercase"
+            style={{
+              fontSize: '10px',
+              letterSpacing: '0.4em',
+              visibility: 'hidden',
+            }}
+          >
+            Crafting systems beyond the visible horizon
+          </p>
+        </div>
+
+        {/* Scroll hint */}
+        <div
+          className="hero-scroll absolute bottom-10 right-10 geist text-[10px] tracking-[0.25em] text-on-surface-variant"
+          style={{ visibility: 'hidden', writingMode: 'vertical-rl' }}
         >
-          I'm Zimaad, a Fullstack and AI developer building AI code visualization tools and high-performance applications that bridge software and finance.
-        </p>
+          SCROLL ↓
+        </div>
       </div>
     </section>
   );

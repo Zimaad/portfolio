@@ -1,382 +1,119 @@
-import { useRef, useEffect, useCallback } from 'react';
-import { useGSAP } from '@gsap/react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
-
 const projects = [
   {
     title: 'Hiatus',
-    description:
-      'Multi-agent research intelligence platform that autonomously identifies structural gaps in academic literature. Built with a LangGraph-orchestrated neural core to crawl, analyze, and synthesize complex research clusters.',
-    techStack: ['Next.js 16', 'LangGraph', 'FastAPI', 'Llama 3.3', 'Firebase', 'Tailwind v4'],
-    githubUrl: '#',
-    liveUrl: '#',
-  },
-  {
-    title: 'CodeLens',
-    description:
-      'AI Codebase Visualization & Chat Platform. Architected a repository analysis tool with an interactive D3.js dependency graph and real-time AI code intelligence.',
-    techStack: ['React 19', 'Vite', 'Tailwind v4', 'D3.js', 'LangChain'],
-    githubUrl: 'https://github.com/Zimaad/codelens',
-    liveUrl: 'https://codelens-two.vercel.app/#',
+    techStack: 'NEXT.JS 16 / LANGGRAPH / FASTAPI / LLAMA 3.3 / FIREBASE',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBS89hYfCKpc8XHgyROmfOs-5NbpOynDGZXRB1slM1BSODiJGd43e0jamx0udm6djBLdSVEPeZEu8nY3LwPlJafnEdEuLo74ifbX1R8Uebyujy7BXiRgtcwRRUOatIOPvNp82jmkLfdwNmVPIbVVJq_GRI4cH3MXAfOI72GPFFwUgw8JES9C-6RyTQWhS7e-rMr3I3JvEq8TIIhWvshbbej8mlHK6JOSKvcXr-9toEyBVzlT7oqEKljSciLw7stjPzh-fP6-HXKug',
+    liveUrl: 'https://hiatus-three.vercel.app/',
+    githubUrl: 'https://github.com/Zimaad/hiatus',
   },
   {
     title: 'Echonote',
-    description:
-      'AI-Powered Meeting Productivity Platform. Engineered a cross-platform automation engine with real-time transcription, speaker diarization, and automated report generation.',
-    techStack: ['Next.js 15', 'Electron', 'Gemini AI', 'Whisper', 'Pyannote.audio'],
-    githubUrl: '#',
-    liveUrl: '#',
+    techStack: 'NEXT.JS 15 / ELECTRON / GEMINI AI / WHISPER / PYANNOTE',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCJCWBOnUAiVKt-kkMEZ5NUVw7TpyCVz4bMahDKbUlWb9rDvGdNwGyDw_S5Ueyn2eR8ChkYLnr1UCVJQPKhLkutRP5j7NezPQ_rV4zvC5SPtKie6DRLZAr_mdULP4H9y0brfEF6oxgvOkHti4ZMXOsK_UaEe94KzSlc1TmnQ_ulhkVNy6HIUSSHWBPsJiaeShge1tUrCZHu95C_9uMOzSWgCawYActnj1kuTtO6Lmr3_qHhbCinN4AvILgmSGuiLrilXWm8u6VuGg',
+    liveUrl: 'https://echonote1.vercel.app/',
+    githubUrl: 'https://github.com/Zimaad/Echonote1',
+  },
+  {
+    title: 'CodeLens',
+    techStack: 'REACT 19 / VITE / D3.JS / LANGCHAIN / LLM APIS / TAILWIND V4',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDBqZ7Fj-0I9Z-0OB5ieYEAZfmiziFnEIbEwgci6MYIs9CNpKaRZylxJj-3T3EAmaVBr17x5nLvb0PMzikJEpIEteEhJLQ_LU7oqJKkdknPYKWTsvVrP5hcDxx3jNxRg-4f_YJeTjuPh92tE0sxYW6eaI7E6P73FkN7bCgaaTy_klGHGWfO0KCfLY2gLEgwvEdrk5PX7NCyyb7rvl_k8vzHaa1OoTEg2Vs-Cs0x3BQwVglYfhSMYqjoy42VdT7ZeZg7tozJ0Rq-UQ',
+    liveUrl: 'https://codelens-two.vercel.app/',
+    githubUrl: 'https://github.com/Zimaad/codelens',
   },
 ];
 
 export default function Projects() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const counterRef = useRef<HTMLSpanElement>(null);
-  const isLockedRef = useRef(false);
-  const isAnimatingRef = useRef(false);
-  const activeIndexRef = useRef(0);
-  const scrollAccRef = useRef(0);
-  const cooldownRef = useRef(false);
-  const lastScrollY = useRef(0);
-
-  const SCROLL_THRESHOLD = 60;
-
-  const updateIndicators = useCallback((idx: number) => {
-    if (counterRef.current) {
-      counterRef.current.textContent = String(idx + 1).padStart(2, '0');
-    }
-    document.querySelectorAll('#projects .progress-dot').forEach((dot, i) => {
-      gsap.to(dot, {
-        backgroundColor: i === idx ? 'var(--color-ink)' : 'var(--color-border)',
-        scale: i === idx ? 1.5 : 1,
-        duration: 0.3,
-      });
-    });
-  }, []);
-
-  const resetToSlide = useCallback((idx: number) => {
-    const section = sectionRef.current;
-    if (!section) return;
-    const slides = section.querySelectorAll('.project-slide');
-    slides.forEach((slide, i) => {
-      if (i === idx) {
-        gsap.set(slide, { xPercent: 0, autoAlpha: 1, scale: 1 });
-      } else if (i < idx) {
-        gsap.set(slide, { xPercent: -110, autoAlpha: 0, scale: 0.88 });
-      } else {
-        gsap.set(slide, { xPercent: 110, autoAlpha: 0, scale: 0.88 });
-      }
-    });
-    activeIndexRef.current = idx;
-    updateIndicators(idx);
-  }, [updateIndicators]);
-
-  const goToSlide = useCallback((newIndex: number, direction: 'next' | 'prev') => {
-    if (isAnimatingRef.current || !sectionRef.current) return;
-    isAnimatingRef.current = true;
-
-    const slides = sectionRef.current.querySelectorAll('.project-slide');
-    const fromSlide = slides[activeIndexRef.current] as HTMLElement;
-    const toSlide = slides[newIndex] as HTMLElement;
-
-    const exitX = direction === 'next' ? -110 : 110;
-    const enterX = direction === 'next' ? 110 : -110;
-
-    gsap.set(toSlide, { xPercent: enterX, autoAlpha: 0, scale: 0.88 });
-
-    gsap.to(fromSlide, {
-      xPercent: exitX,
-      scale: 0.88,
-      autoAlpha: 0,
-      duration: 0.65,
-      ease: 'power3.inOut',
-    });
-
-    gsap.to(toSlide, {
-      xPercent: 0,
-      scale: 1,
-      autoAlpha: 1,
-      duration: 0.65,
-      ease: 'power3.inOut',
-      onComplete: () => {
-        activeIndexRef.current = newIndex;
-        isAnimatingRef.current = false;
-        scrollAccRef.current = 0;
-        updateIndicators(newIndex);
-      },
-    });
-  }, [updateIndicators]);
-
-  // GSAP: set initial slide states + header reveal
-  useGSAP(() => {
-    if (!sectionRef.current) return;
-    const slides = gsap.utils.toArray<HTMLElement>('.project-slide');
-    gsap.set(slides[0], { xPercent: 0, autoAlpha: 1, scale: 1 });
-    slides.slice(1).forEach((s) => gsap.set(s, { xPercent: 110, autoAlpha: 0, scale: 0.88 }));
-
-    gsap.fromTo('.projects-header',
-      { autoAlpha: 0, y: 40 },
-      {
-        autoAlpha: 1, y: 0,
-        duration: 1.2,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 80%',
-          toggleActions: 'play none none none',
-        },
-      }
-    );
-  }, { scope: sectionRef });
-
-  // Scroll-lock + wheel-driven carousel + mobile touch support
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    let touchStartY = 0;
-
-    const lock = () => {
-      if (isLockedRef.current || cooldownRef.current) return;
-      // Snap section to viewport top
-      const top = section.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top, behavior: 'smooth' });
-      isLockedRef.current = true;
-      scrollAccRef.current = 0;
-      document.documentElement.style.overflow = 'hidden';
-      // On mobile, also disable body scroll
-      document.body.style.overflow = 'hidden';
-      document.body.style.touchAction = 'none';
-    };
-
-    const unlock = () => {
-      if (!isLockedRef.current) return;
-      isLockedRef.current = false;
-      document.documentElement.style.overflow = '';
-      document.body.style.overflow = '';
-      document.body.style.touchAction = '';
-      cooldownRef.current = true;
-      setTimeout(() => { cooldownRef.current = false; }, 800);
-    };
-
-    // Detect when section enters viewport
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.5 && !cooldownRef.current) {
-          const scrollingDown = window.scrollY >= lastScrollY.current;
-          if (scrollingDown && activeIndexRef.current === 0) {
-            resetToSlide(0);
-            lock();
-          } else if (!scrollingDown && activeIndexRef.current === projects.length - 1) {
-            resetToSlide(projects.length - 1);
-            lock();
-          }
-        }
-      },
-      { threshold: [0.5] }
-    );
-    observer.observe(section);
-
-    const handleScroll = () => {
-      lastScrollY.current = window.scrollY;
-    };
-
-    const handleWheel = (e: WheelEvent) => {
-      if (!isLockedRef.current) return;
-      e.preventDefault();
-      if (isAnimatingRef.current) return;
-
-      scrollAccRef.current += e.deltaY;
-
-      if (scrollAccRef.current > SCROLL_THRESHOLD) {
-        if (activeIndexRef.current < projects.length - 1) {
-          goToSlide(activeIndexRef.current + 1, 'next');
-        } else {
-          unlock();
-        }
-        scrollAccRef.current = 0;
-      } else if (scrollAccRef.current < -SCROLL_THRESHOLD) {
-        if (activeIndexRef.current > 0) {
-          goToSlide(activeIndexRef.current - 1, 'prev');
-        } else {
-          unlock();
-        }
-        scrollAccRef.current = 0;
-      }
-    };
-
-    // Mobile touch events
-    const handleTouchStart = (e: TouchEvent) => {
-      touchStartY = e.touches[0].clientY;
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (!isLockedRef.current) return;
-      e.preventDefault();
-      if (isAnimatingRef.current) return;
-
-      const touchY = e.touches[0].clientY;
-      const deltaY = touchStartY - touchY;
-
-      // Only respond to vertical swipes or primary delta
-      if (Math.abs(deltaY) > 30) {
-        if (deltaY > SCROLL_THRESHOLD) {
-          if (activeIndexRef.current < projects.length - 1) {
-            goToSlide(activeIndexRef.current + 1, 'next');
-          } else {
-            unlock();
-          }
-          touchStartY = touchY; // Reset to avoid double triggers
-        } else if (deltaY < -SCROLL_THRESHOLD) {
-          if (activeIndexRef.current > 0) {
-            goToSlide(activeIndexRef.current - 1, 'prev');
-          } else {
-            unlock();
-          }
-          touchStartY = touchY;
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    window.addEventListener('touchstart', handleTouchStart, { passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: false });
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('wheel', handleWheel);
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove', handleTouchMove);
-      document.documentElement.style.overflow = '';
-      document.body.style.overflow = '';
-      document.body.style.touchAction = '';
-    };
-  }, [goToSlide, resetToSlide]);
-
   return (
-    <section
-      id="projects"
-      ref={sectionRef}
-      className="min-h-[100dvh] bg-transparent flex flex-col justify-center items-center px-6 md:px-12 py-20"
-    >
-      {/* Header row */}
-      <div className="projects-header w-full max-w-3xl flex items-end justify-between mb-12" style={{ visibility: 'hidden' }}>
-        <div>
-          <p
-            className="text-muted font-medium mb-4"
-            style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase' }}
+    <section id="projects" className="py-40 px-6 md:px-10 bg-surface">
+      <div className="max-w-screen-xl mx-auto">
+        {/* Header row */}
+        <div className="flex justify-between items-end mb-16">
+          <div>
+            <p className="geist text-[10px] tracking-[0.2em] text-primary mb-4">03 — SELECTED WORK</p>
+            <h2 className="cormorant text-5xl md:text-6xl">Archives</h2>
+          </div>
+          <a
+            className="cormorant italic text-lg border-b border-primary hover:pb-2 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]"
+            href="https://github.com/Zimaad"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            Projects
-          </p>
-          <h2 className="font-serif text-4xl md:text-5xl text-ink leading-tight tracking-tight">
-            Selected work
-          </h2>
+            View all projects
+          </a>
         </div>
 
-      </div>
-
-      {/* Carousel Wrapper — no overflow-hidden so arrows can hang off the sides */}
-      <div className="relative w-full max-w-3xl min-h-[480px] md:min-h-[400px]">
-        {/* Navigation Arrows */}
-        <button
-          onClick={() => {
-            const prevIdx = activeIndexRef.current > 0 ? activeIndexRef.current - 1 : projects.length - 1;
-            goToSlide(prevIdx, 'prev');
-          }}
-          className="absolute left-[-20px] md:left-[-60px] top-1/2 -translate-y-1/2 z-30 w-12 h-12 flex items-center justify-center rounded-full border border-border text-muted hover:text-ink hover:border-ink transition-all duration-400 bg-bone/80 backdrop-blur-md opacity-60 hover:opacity-100 shadow-sm"
-          aria-label="Previous project"
-        >
-          <span className="text-xl md:text-2xl">&#8592;</span>
-        </button>
-        <button
-          onClick={() => {
-            const nextIdx = activeIndexRef.current < projects.length - 1 ? activeIndexRef.current + 1 : 0;
-            goToSlide(nextIdx, 'next');
-          }}
-          className="absolute right-[-20px] md:right-[-60px] top-1/2 -translate-y-1/2 z-30 w-12 h-12 flex items-center justify-center rounded-full border border-border text-muted hover:text-ink hover:border-ink transition-all duration-400 bg-bone/80 backdrop-blur-md opacity-60 hover:opacity-100 shadow-sm"
-          aria-label="Next project"
-        >
-          <span className="text-xl md:text-2xl">&#8594;</span>
-        </button>
-
-        {/* Clipped Slides Container — specifically for the sliding animation */}
-        <div className="absolute inset-0 overflow-hidden rounded-2xl border border-border bg-bone/40 backdrop-blur-sm group">
+        {/* 3-column grid — all projects side by side */}
+        <div className="grid md:grid-cols-3 gap-x-8 gap-y-20">
           {projects.map((project, i) => (
-            <div key={i} className="project-slide absolute inset-0 flex items-center">
-              <div className="w-full h-full p-8 md:p-10 flex flex-col justify-center">
-                <h3 className="font-serif text-3xl md:text-4xl text-ink mb-4 leading-snug">
-                  {project.title}
-                </h3>
+            <div key={i} className="group relative">
+              {/* Clickable image — links to live site if available */}
+              <a
+                href={project.liveUrl || project.githubUrl || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block aspect-[3/4] overflow-hidden bg-surface-container-low mb-6"
+              >
+                <img
+                  className="w-full h-full object-cover grayscale group-hover:scale-[1.03] group-hover:grayscale-0 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]"
+                  src={project.image}
+                  alt={project.title}
+                />
+              </a>
 
-                <p className="text-muted text-base md:text-lg leading-relaxed mb-8 max-w-xl font-light">
-                  {project.description}
-                </p>
-
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {project.techStack.map((tech) => (
-                    <span
-                      key={tech}
-                      className="text-accent bg-accent-light px-3 py-1.5 rounded-full font-medium"
-                      style={{ fontSize: '10px', letterSpacing: '0.05em', textTransform: 'uppercase' }}
-                    >
-                      {tech}
-                    </span>
-                  ))}
+              <div className="flex justify-between items-start">
+                <div>
+                  <h4 className="cormorant text-2xl mb-1.5">{project.title}</h4>
+                  <p className="geist text-[9px] text-on-surface-variant tracking-[0.12em] uppercase">
+                    {project.techStack}
+                  </p>
                 </div>
 
-                <div className="flex items-center gap-6">
-                  <a
-                    href={project.githubUrl}
-                    className="text-muted hover:text-ink transition-colors duration-300 inline-flex items-center gap-1.5 group"
-                    style={{ fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 500 }}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    GitHub
-                    <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5">&#8599;</span>
-                  </a>
-                  <a
-                    href={project.liveUrl}
-                    className="text-muted hover:text-ink transition-colors duration-300 inline-flex items-center gap-1.5 group"
-                    style={{ fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 500 }}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Live
-                    <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5">&#8599;</span>
-                  </a>
+                {/* Link icons */}
+                <div className="flex items-center gap-3">
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${project.title} live site`}
+                      className="text-outline-variant hover:text-primary transition-colors duration-500"
+                    >
+                      <span className="material-symbols-outlined text-[20px]">
+                        arrow_outward
+                      </span>
+                    </a>
+                  )}
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${project.title} GitHub`}
+                      className="flex items-center text-outline-variant hover:text-primary transition-colors duration-500"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-[20px] h-[20px] relative -top-[4px]"
+                      >
+                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+                      </svg>
+                    </a>
+                  )}
+                  {!project.liveUrl && !project.githubUrl && (
+                    <span
+                      className="geist text-[8px] text-outline-variant tracking-[0.15em] uppercase"
+                      title="Private / internal project"
+                    >
+                      PRIVATE
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
           ))}
         </div>
-      </div>
-
-      {/* Progress dots */}
-      <div className="flex gap-4 mt-10">
-        {projects.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => {
-              if (i === activeIndexRef.current || isAnimatingRef.current) return;
-              goToSlide(i, i > activeIndexRef.current ? 'next' : 'prev');
-            }}
-            className="progress-dot rounded-full transition-all duration-300 cursor-pointer"
-            style={{
-              width: 10,
-              height: 10,
-              padding: 0,
-              border: 'none',
-              backgroundColor: i === activeIndexRef.current ? 'var(--color-ink)' : 'var(--color-border)',
-            }}
-            aria-label={`Go to project ${i + 1}`}
-          />
-        ))}
       </div>
     </section>
   );
