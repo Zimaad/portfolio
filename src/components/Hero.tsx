@@ -98,7 +98,7 @@ export default function Hero() {
         <video
           ref={videoRef}
           className="hero-video w-full h-full object-cover"
-          src="/public\Earth_Video_Generation_Request-ezremove.mp4"
+          src="/bg2.mp4"
           muted
           playsInline
           preload="auto"
