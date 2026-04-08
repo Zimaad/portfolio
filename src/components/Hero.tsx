@@ -1,99 +1,125 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function Hero() {
+export default function Hero({ introComplete }: { introComplete: boolean }) {
   const heroRef = useRef<HTMLDivElement>(null);
   const videoWrapRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const hasPlayedRef = useRef(false);
+  const gsapCtxRef = useRef<ReturnType<typeof gsap.context> | null>(null);
 
-  useGSAP(() => {
+  /* ─── Pause video on mount so the first frame doesn't flash ─── */
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+  }, []);
+
+  /* ─── Set up GSAP only AFTER the intro finishes ─── */
+  useEffect(() => {
+    if (!introComplete) return;
+
     const section = heroRef.current;
     const videoWrap = videoWrapRef.current;
     if (!section || !videoWrap) return;
 
-    /* ─── Entry: just fade in the text ─── */
-    const entryTl = gsap.timeline({ delay: 0.2 });
+    // Kill any previous context just in case
+    gsapCtxRef.current?.revert();
 
-    entryTl.fromTo('.hero-line',
-      { y: '110%' },
-      { y: '0%', duration: 1.2, stagger: 0.14, ease: 'expo.out' }
-    );
+    const ctx = gsap.context(() => {
+      /* ─── Entry: fade in the hero text ─── */
+      const entryTl = gsap.timeline({ delay: 0.2 });
 
-    entryTl.fromTo('.hero-tagline',
-      { autoAlpha: 0, y: 12 },
-      { autoAlpha: 0.5, y: 0, duration: 1.4, ease: 'power2.out' },
-      '-=0.6'
-    );
+      entryTl.fromTo('.hero-line',
+        { y: '110%' },
+        { y: '0%', duration: 1.2, stagger: 0.14, ease: 'expo.out' }
+      );
 
-    entryTl.fromTo('.hero-scroll',
-      { autoAlpha: 0 },
-      { autoAlpha: 0.35, duration: 1, ease: 'power2.out' },
-      '-=0.8'
-    );
+      entryTl.fromTo('.hero-tagline',
+        { autoAlpha: 0, y: 12 },
+        { autoAlpha: 0.5, y: 0, duration: 1.4, ease: 'power2.out' },
+        '-=0.6'
+      );
 
-    /* ─── Scroll-driven porthole → fullscreen ─── */
-    const scrollTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: 'top top',
-        end: '+=450%',
-        pin: true,
-        scrub: 0.6,
-        anticipatePin: 1,
-        onUpdate: () => {
-          // Start playing the video on first scroll interaction
-          if (!hasPlayedRef.current && videoRef.current) {
-            hasPlayedRef.current = true;  // flip BEFORE play so blocker lets it through
-            videoRef.current.play();
-          }
+      entryTl.fromTo('.hero-scroll',
+        { autoAlpha: 0 },
+        { autoAlpha: 0.35, duration: 1, ease: 'power2.out' },
+        '-=0.8'
+      );
+
+      /* ─── Scroll-driven porthole → fullscreen ─── */
+      const scrollTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: '+=450%',
+          pin: true,
+          scrub: 0.6,
+          anticipatePin: 1,
+          onUpdate: () => {
+            // Start playing the video on first scroll interaction
+            if (!hasPlayedRef.current && videoRef.current) {
+              hasPlayedRef.current = true;
+              videoRef.current.play();
+            }
+          },
         },
-      },
-    });
+      });
 
-    // Fade out text as scroll begins
-    scrollTl.to('.hero-content', {
-      opacity: 0,
-      y: -60,
-      duration: 0.3,
-      ease: 'power2.in',
-    }, 0);
+      // Fade out text as scroll begins
+      scrollTl.to('.hero-content', {
+        opacity: 0,
+        y: -60,
+        duration: 0.3,
+        ease: 'power2.in',
+      }, 0);
 
-    scrollTl.to('.hero-scroll', {
-      autoAlpha: 0,
-      duration: 0.1,
-    }, 0);
+      scrollTl.to('.hero-scroll', {
+        autoAlpha: 0,
+        duration: 0.1,
+      }, 0);
 
-    // Expand clip-path from porthole to full viewport
-    scrollTl.to(videoWrap, {
-      clipPath: 'circle(100% at 51% 46%)',
-      duration: 1,
-      ease: 'none',
-    }, 0);
+      // Expand clip-path from porthole to full viewport
+      scrollTl.to(videoWrap, {
+        clipPath: 'circle(100% at 51% 46%)',
+        duration: 1,
+        ease: 'none',
+      }, 0);
 
-    // Subtle cinematic zoom once nearly open
-    scrollTl.fromTo('.hero-video',
-      { scale: 1 },
-      { scale: 1.06, duration: 0.3, ease: 'none' },
-      0.7
-    );
+      // Subtle cinematic zoom once nearly open
+      scrollTl.fromTo('.hero-video',
+        { scale: 1 },
+        { scale: 1.06, duration: 0.3, ease: 'none' },
+        0.7
+      );
+    }, heroRef);
 
-  }, { scope: heroRef });
+    gsapCtxRef.current = ctx;
+
+    return () => {
+      ctx.revert();
+    };
+  }, [introComplete]);
 
   return (
     <section
       ref={heroRef}
       className="relative h-screen overflow-hidden bg-[#050508]"
     >
-      {/* ── Video with clip-path porthole — visible immediately ── */}
+      {/* ── Video with clip-path porthole ── */}
       <div
         ref={videoWrapRef}
         className="absolute inset-0 z-0"
-        style={{ clipPath: 'circle(15.5% at 51% 46%)' }}
+        style={{
+          clipPath: 'circle(15.5% at 51% 46%)',
+          opacity: introComplete ? 1 : 0,
+          transition: 'opacity 0.01s',
+        }}
       >
         <video
           ref={videoRef}
