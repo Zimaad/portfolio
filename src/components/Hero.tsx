@@ -5,7 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function Hero({ introComplete }: { introComplete: boolean }) {
+export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
   const videoWrapRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -20,10 +20,8 @@ export default function Hero({ introComplete }: { introComplete: boolean }) {
     }
   }, []);
 
-  /* ─── Set up GSAP only AFTER the intro finishes ─── */
+  /* ─── Set up GSAP ─── */
   useEffect(() => {
-    if (!introComplete) return;
-
     const section = heroRef.current;
     const videoWrap = videoWrapRef.current;
     if (!section || !videoWrap) return;
@@ -104,7 +102,7 @@ export default function Hero({ introComplete }: { introComplete: boolean }) {
     return () => {
       ctx.revert();
     };
-  }, [introComplete]);
+  }, []);
 
   return (
     <section
@@ -117,7 +115,7 @@ export default function Hero({ introComplete }: { introComplete: boolean }) {
         className="absolute inset-0 z-0"
         style={{
           clipPath: 'circle(15.5% at 51% 46%)',
-          opacity: introComplete ? 1 : 0,
+          opacity: 1,
           transition: 'opacity 0.01s',
         }}
       >
