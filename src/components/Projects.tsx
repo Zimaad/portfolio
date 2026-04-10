@@ -1,26 +1,5 @@
-const projects = [
-  {
-    title: 'Hiatus',
-    techStack: 'NEXT.JS 16 / LANGGRAPH / FASTAPI / LLAMA 3.3 / FIREBASE',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBS89hYfCKpc8XHgyROmfOs-5NbpOynDGZXRB1slM1BSODiJGd43e0jamx0udm6djBLdSVEPeZEu8nY3LwPlJafnEdEuLo74ifbX1R8Uebyujy7BXiRgtcwRRUOatIOPvNp82jmkLfdwNmVPIbVVJq_GRI4cH3MXAfOI72GPFFwUgw8JES9C-6RyTQWhS7e-rMr3I3JvEq8TIIhWvshbbej8mlHK6JOSKvcXr-9toEyBVzlT7oqEKljSciLw7stjPzh-fP6-HXKug',
-    liveUrl: 'https://hiatus-three.vercel.app/',
-    githubUrl: 'https://github.com/Zimaad/hiatus',
-  },
-  {
-    title: 'Echonote',
-    techStack: 'NEXT.JS 15 / ELECTRON / GEMINI AI / WHISPER / PYANNOTE',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCJCWBOnUAiVKt-kkMEZ5NUVw7TpyCVz4bMahDKbUlWb9rDvGdNwGyDw_S5Ueyn2eR8ChkYLnr1UCVJQPKhLkutRP5j7NezPQ_rV4zvC5SPtKie6DRLZAr_mdULP4H9y0brfEF6oxgvOkHti4ZMXOsK_UaEe94KzSlc1TmnQ_ulhkVNy6HIUSSHWBPsJiaeShge1tUrCZHu95C_9uMOzSWgCawYActnj1kuTtO6Lmr3_qHhbCinN4AvILgmSGuiLrilXWm8u6VuGg',
-    liveUrl: 'https://echonote1.vercel.app/',
-    githubUrl: 'https://github.com/Zimaad/Echonote1',
-  },
-  {
-    title: 'CodeLens',
-    techStack: 'REACT 19 / VITE / D3.JS / LANGCHAIN / LLM APIS / TAILWIND V4',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDBqZ7Fj-0I9Z-0OB5ieYEAZfmiziFnEIbEwgci6MYIs9CNpKaRZylxJj-3T3EAmaVBr17x5nLvb0PMzikJEpIEteEhJLQ_LU7oqJKkdknPYKWTsvVrP5hcDxx3jNxRg-4f_YJeTjuPh92tE0sxYW6eaI7E6P73FkN7bCgaaTy_klGHGWfO0KCfLY2gLEgwvEdrk5PX7NCyyb7rvl_k8vzHaa1OoTEg2Vs-Cs0x3BQwVglYfhSMYqjoy42VdT7ZeZg7tozJ0Rq-UQ',
-    liveUrl: 'https://codelens-two.vercel.app/',
-    githubUrl: 'https://github.com/Zimaad/codelens',
-  },
-];
+import { Link } from 'react-router-dom';
+import { projects } from '../data/projects';
 
 export default function Projects() {
   return (
@@ -46,23 +25,23 @@ export default function Projects() {
         <div className="grid md:grid-cols-3 gap-x-8 gap-y-20">
           {projects.map((project, i) => (
             <div key={i} className="group relative">
-              {/* Clickable image — links to live site if available */}
-              <a
-                href={project.liveUrl || project.githubUrl || '#'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block aspect-[3/4] overflow-hidden bg-surface-container-low mb-6"
+              {/* Clickable image — links to project detail page */}
+              <Link
+                to={`/project/${project.slug}`}
+                className="block aspect-[3/4] overflow-hidden bg-surface-container-low mb-6 cursor-pointer"
               >
                 <img
                   className="w-full h-full object-cover grayscale group-hover:scale-[1.03] group-hover:grayscale-0 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]"
                   src={project.image}
                   alt={project.title}
                 />
-              </a>
+              </Link>
 
               <div className="flex justify-between items-start">
                 <div>
-                  <h4 className="cormorant text-2xl mb-1.5">{project.title}</h4>
+                  <Link to={`/project/${project.slug}`}>
+                    <h4 className="cormorant text-2xl mb-1.5 hover:text-primary transition-colors cursor-pointer">{project.title}</h4>
+                  </Link>
                   <p className="geist text-[9px] text-on-surface-variant tracking-[0.12em] uppercase">
                     {project.techStack}
                   </p>

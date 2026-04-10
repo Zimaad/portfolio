@@ -1,16 +1,12 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import About from './components/About'
-import Skills from './components/Skills'
-import Projects from './components/Projects'
-import Experience from './components/Experience'
-import Contact from './components/Contact'
-import Footer from './components/Footer'
+import Home from './pages/Home'
+import ProjectDetail from './components/ProjectDetail'
 import CustomCursor from './components/CustomCursor'
 
 export default function App() {
   return (
-    <>
+    <Router>
       <CustomCursor />
 
       {/* Subtle film-grain noise overlay */}
@@ -18,16 +14,10 @@ export default function App() {
 
       <Navbar />
 
-      <main className="relative z-10 w-full overflow-x-hidden">
-        <Hero />
-        <About />
-        <Experience />
-        <Projects />
-        <Skills />
-        <Contact />
-      </main>
-
-      <Footer />
-    </>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/project/:slug" element={<ProjectDetail />} />
+      </Routes>
+    </Router>
   )
 }

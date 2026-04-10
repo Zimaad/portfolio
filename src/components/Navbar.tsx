@@ -1,7 +1,8 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -9,6 +10,20 @@ export default function Navbar() {
   const navRef = useRef<HTMLElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const { pathname, hash } = useLocation();
+  const navigate = useNavigate();
+
+  // Handle hash scroll on route change
+  useEffect(() => {
+    if (pathname === '/' && hash) {
+      const element = document.querySelector(hash);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, [pathname, hash]);
 
   // Global scroll trigger for nav hide/show
   useGSAP(() => {
@@ -49,6 +64,22 @@ export default function Navbar() {
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith('#')) {
+      if (pathname === '/') {
+        e.preventDefault();
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else {
+        // Navigate to home then the hash will be handled by useEffect
+        navigate('/' + href);
+      }
+      closeMenu();
+    }
+  };
+
   const navItems = [
     { label: 'PROJECTS', href: '#projects' },
     { label: 'SKILLS', href: '#skills' },
@@ -63,19 +94,30 @@ export default function Navbar() {
         ref={navRef}
         className="fixed top-0 w-full z-[100] flex justify-between items-center px-6 md:px-10 py-6 bg-transparent backdrop-blur-md"
       >
-        <div className="text-xl font-bold tracking-tighter cormorant text-neutral-50 uppercase">ZIMAAD</div>
+        <Link to="/" className="text-xl font-bold tracking-tighter cormorant text-neutral-50 uppercase cursor-pointer">ZIMAAD</Link>
         
         <nav className="hidden md:flex gap-12">
           {navItems.map((item) => (
-            <a 
-              key={item.label}
-              className="text-neutral-400 font-medium geist all-caps tracking-[0.2em] text-[10px] hover:text-neutral-50 transition-colors duration-300" 
-              href={item.href}
-              target={item.external ? "_blank" : undefined}
-              rel={item.external ? "noopener noreferrer" : undefined}
-            >
-              {item.label}
-            </a>
+            item.external ? (
+              <a 
+                key={item.label}
+                className="text-neutral-400 font-medium geist all-caps tracking-[0.2em] text-[10px] hover:text-neutral-50 transition-colors duration-300" 
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {item.label}
+              </a>
+            ) : (
+              <a 
+                key={item.label}
+                className="text-neutral-400 font-medium geist all-caps tracking-[0.2em] text-[10px] hover:text-neutral-50 transition-colors duration-300 cursor-pointer" 
+                href={item.href}
+                onClick={(e) => handleNavClick(e, item.href)}
+              >
+                {item.label}
+              </a>
+            )
           ))}
         </nav>
 
@@ -97,16 +139,29 @@ export default function Navbar() {
       >
         <nav className="flex flex-col items-center gap-8">
           {navItems.map((item) => (
-            <a 
-              key={item.label}
-              onClick={closeMenu}
-              className="mobile-link text-3xl font-bold cormorant text-neutral-50 tracking-tighter hover:text-neutral-400 transition-colors"
-              href={item.href}
-              target={item.external ? "_blank" : undefined}
-              rel={item.external ? "noopener noreferrer" : undefined}
-            >
-              {item.label}
-            </a>
+            item.external ? (
+              <a 
+                key={item.label}
+                className="mobile-link text-3xl font-bold cormorant text-neutral-50 tracking-tighter hover:text-neutral-400 transition-colors"
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {item.label}
+              </a>
+            ) : (
+              <a 
+                key={item.label}
+                onClick={(e) => {
+                  handleNavClick(e, item.href);
+                  closeMenu();
+                }}
+                className="mobile-link text-3xl font-bold cormorant text-neutral-50 tracking-tighter hover:text-neutral-400 transition-colors cursor-pointer"
+                href={item.href}
+              >
+                {item.label}
+              </a>
+            )
           ))}
         </nav>
       </div>

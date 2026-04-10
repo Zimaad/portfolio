@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 
 /**
  * Custom cursor with mix-blend-mode: difference.
@@ -6,6 +7,14 @@ import { useEffect, useRef } from 'react';
  */
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
+  const { pathname } = useLocation();
+
+  // Reset cursor on route change
+  useEffect(() => {
+    if (cursorRef.current) {
+      cursorRef.current.style.transform = 'translate(-50%, -50%) scale(1)';
+    }
+  }, [pathname]);
 
   useEffect(() => {
     const cursor = cursorRef.current;
@@ -23,11 +32,11 @@ export default function CustomCursor() {
     };
 
     const handleMouseEnter = () => {
-      cursor.style.transform = 'translate(-50%, -50%) scale(4)';
+      if (cursor) cursor.style.transform = 'translate(-50%, -50%) scale(4)';
     };
 
     const handleMouseLeave = () => {
-      cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+      if (cursor) cursor.style.transform = 'translate(-50%, -50%) scale(1)';
     };
 
     window.addEventListener('mousemove', moveCursor);
