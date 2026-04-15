@@ -122,7 +122,7 @@ export default function Hero() {
         <video
           ref={videoRef}
           className="hero-video w-full h-full object-cover"
-          src="/bg2.mp4"
+          src="/y1NwmvgO.mp4"
           muted
           playsInline
           preload="auto"
