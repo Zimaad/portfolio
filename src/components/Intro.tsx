@@ -199,7 +199,7 @@ export default function Intro({ onComplete }: { onComplete: () => void }) {
             textAlign: 'center',
           }}
         >
-          Portfolio — 2026
+          Digital Studio — 2026
         </p>
 
         {/* Role tags */}
@@ -212,7 +212,7 @@ export default function Intro({ onComplete }: { onComplete: () => void }) {
             marginTop: '0.5rem',
           }}
         >
-          {['Fullstack Architect', 'Designer', 'Builder'].map((tag) => (
+          {['Software Development', 'AI Solutions', 'Web Design'].map((tag) => (
             <span
               key={tag}
               className="intro-tag geist"

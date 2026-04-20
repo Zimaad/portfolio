@@ -44,7 +44,7 @@ export default function ProjectDetail() {
           <div className="w-10 h-10 rounded-full border border-neutral-800 flex items-center justify-center group-hover:bg-neutral-50 group-hover:text-neutral-950 transition-all duration-500">
             <span className="material-symbols-outlined text-sm">arrow_back</span>
           </div>
-          <span className="geist text-[9px] tracking-[0.2em] font-medium opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-500">BACK TO WORK</span>
+          <span className="geist text-[9px] tracking-[0.2em] font-medium opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-500">ALL CASE STUDIES</span>
         </Link>
       </nav>
 
@@ -68,9 +68,16 @@ export default function ProjectDetail() {
             
             <div className="space-y-10">
               <div className="meta-item">
-                <p className="geist text-[9px] tracking-[0.2em] text-neutral-500 mb-2 uppercase">Role —</p>
-                <p className="geist text-sm text-neutral-200">{project.role || 'Digital Experience'}</p>
+                <p className="geist text-[9px] tracking-[0.2em] text-neutral-500 mb-2 uppercase">Scope —</p>
+                <p className="geist text-sm text-neutral-200">{project.role || 'End-to-End Development'}</p>
               </div>
+
+              {project.clientType && (
+                <div className="meta-item">
+                  <p className="geist text-[9px] tracking-[0.2em] text-neutral-500 mb-2 uppercase">Type —</p>
+                  <p className="geist text-sm text-neutral-200">{project.clientType}</p>
+                </div>
+              )}
               
               <div className="meta-item">
                 <p className="geist text-[9px] tracking-[0.2em] text-neutral-500 mb-2 uppercase">Year —</p>
@@ -116,7 +123,18 @@ export default function ProjectDetail() {
             </p>
 
             <div className="prose prose-invert max-w-none">
-              <h3 className="cormorant text-2xl mb-6 text-neutral-50">Overview</h3>
+              {/* Results highlight */}
+              {project.results && (
+                <div className="mb-12 p-6 border border-neutral-800 bg-neutral-900/50">
+                  <p className="geist text-[9px] tracking-[0.2em] text-neutral-500 mb-3 uppercase">Key Result —</p>
+                  <p className="manrope text-lg text-neutral-200 flex items-center gap-2">
+                    <span className="material-symbols-outlined text-primary text-xl">trending_up</span>
+                    {project.results}
+                  </p>
+                </div>
+              )}
+
+              <h3 className="cormorant text-2xl mb-6 text-neutral-50">The Challenge & Solution</h3>
               <p className="geist text-neutral-400 leading-relaxed mb-12 text-lg">
                 {project.details}
               </p>
@@ -129,9 +147,9 @@ export default function ProjectDetail() {
                 />
               </div>
 
-              <h3 className="cormorant text-2xl mb-6 text-neutral-50">Conclusion</h3>
+              <h3 className="cormorant text-2xl mb-6 text-neutral-50">Takeaway</h3>
               <p className="geist text-neutral-400 leading-relaxed text-lg">
-                {project.conclusion || "This project represents a significant step in exploring the intersection of modern web technology and complex data systems."}
+                {project.conclusion || "This project represents a significant step in building production-grade software that solves real problems."}
               </p>
             </div>
           </div>
@@ -139,12 +157,12 @@ export default function ProjectDetail() {
         </div>
       </section>
 
-      {/* Next Project Footer */}
+      {/* Footer */}
       <footer className="py-20 border-t border-neutral-900">
         <div className="max-w-screen-xl mx-auto px-6 md:px-10 flex justify-between items-center">
-          <Link to="/" className="geist text-[9px] tracking-[0.3em] hover:text-primary transition-colors">BACK TO LIST</Link>
+          <Link to="/" className="geist text-[9px] tracking-[0.3em] hover:text-primary transition-colors">ALL CASE STUDIES</Link>
           <div className="flex gap-10">
-            <span className="geist text-[9px] tracking-[0.3em] text-neutral-600 uppercase">Archive 2024 —</span>
+            <span className="geist text-[9px] tracking-[0.3em] text-neutral-600 uppercase">Case Study — {project.year || '2024'}</span>
           </div>
         </div>
       </footer>

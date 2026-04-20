@@ -124,6 +124,11 @@ export default function Hero() {
     };
   }, [firstFrameLoaded]);
 
+  const scrollToContact = () => {
+    const el = document.querySelector('#contact');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <section ref={heroRef} className="relative h-screen overflow-hidden bg-[#050508]">
       <div
@@ -167,9 +172,16 @@ export default function Hero() {
               <span className="block overflow-hidden"><span className="hero-line block">Zimaad</span></span>
               <span className="block overflow-hidden"><span className="hero-line block italic text-on-surface-variant/50">Azhari</span></span>
             </h1>
-            <p className="hero-tagline geist text-on-surface-variant/60 uppercase text-[10px] tracking-[0.4em]">
-              Crafting systems beyond the visible horizon
+            <p className="hero-tagline manrope text-on-surface-variant/70 text-sm md:text-base max-w-lg leading-relaxed mb-8">
+              I design & build software, websites, and AI-powered tools for businesses ready to scale.
             </p>
+            <button
+              onClick={scrollToContact}
+              className="hero-tagline group inline-flex items-center gap-3 bg-white text-black px-8 py-4 geist text-[10px] tracking-[0.3em] uppercase hover:bg-white/90 transition-all duration-500"
+            >
+              Start a Project
+              <span className="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform duration-300">arrow_forward</span>
+            </button>
           </div>
         </div>
       )}

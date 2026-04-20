@@ -1,41 +1,64 @@
-const skillCategories = [
+const steps = [
   {
-    label: 'FRONTEND',
-    skills: ['React / Next.js', 'Tailwind CSS', 'Vite', 'D3.js / GSAP', 'Electron'],
+    number: '01',
+    icon: 'chat',
+    title: 'Discovery',
+    description: "We talk about your idea, goals, and timeline. No jargon, no BS — just a clear conversation about what you need and how I can help.",
   },
   {
-    label: 'BACKEND',
-    skills: ['Node.js', 'FastAPI / Flask', 'Django', 'REST APIs', 'Python / C++ / Java'],
+    number: '02',
+    icon: 'draw',
+    title: 'Design',
+    description: "I create mockups and prototypes you'll actually love before writing a single line of code. You see exactly what you're getting.",
   },
   {
-    label: 'AI / ML',
-    skills: ['LangChain / LangGraph', 'OpenAI / Gemini AI', 'Pyannote.audio', 'Pandas / NumPy', 'Scikit-learn'],
+    number: '03',
+    icon: 'code',
+    title: 'Build',
+    description: "I develop your product using battle-tested, modern tech. You get regular updates, a transparent process, and zero guesswork about where things stand.",
   },
   {
-    label: 'DATABASES & DEVOPS',
-    skills: ['Firebase', 'MongoDB', 'Google Cloud (GCP)', 'Docker', 'CI/CD / GitHub Actions'],
+    number: '04',
+    icon: 'rocket_launch',
+    title: 'Launch & Support',
+    description: "I deploy, test, and provide ongoing support. Your product goes live stress-free, and I stick around to make sure everything runs smooth.",
   },
 ];
 
 export default function Skills() {
   return (
-    <section id="skills" className="py-40 px-10 bg-surface-container-low">
-      <div className="max-w-screen-xl mx-auto grid md:grid-cols-12 gap-10">
-        <div className="md:col-span-4">
-          <p className="geist text-[10px] tracking-[0.2em] text-primary mb-8">04 — TOOLKIT</p>
-          <h2 className="cormorant text-5xl">The Fullstack <br /> Arsenal</h2>
+    <section id="process" className="py-40 px-6 md:px-10 bg-surface-container-low">
+      <div className="max-w-screen-xl mx-auto">
+        <div className="mb-20">
+          <p className="geist text-[10px] tracking-[0.2em] text-primary mb-4">04 — PROCESS</p>
+          <h2 className="cormorant text-5xl md:text-6xl text-on-surface">How I Work</h2>
         </div>
-        <div className="md:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-8">
-          {skillCategories.map((category) => (
-            <div key={category.label}>
-              <p className="geist text-[9px] text-outline-variant mb-4 tracking-[0.2em] uppercase">
-                {category.label}
-              </p>
-              <ul className="manrope text-lg space-y-2 font-light text-on-surface">
-                {category.skills.map((skill) => (
-                  <li key={skill}>{skill}</li>
-                ))}
-              </ul>
+
+        <div className="grid md:grid-cols-4 gap-8">
+          {steps.map((step, index) => (
+            <div key={step.number} className="group relative">
+              {/* Connector line (hidden on last item) */}
+              {index < steps.length - 1 && (
+                <div className="hidden md:block absolute top-6 left-[calc(100%+1rem)] w-[calc(100%-2rem)] h-[1px] bg-outline-variant/15" />
+              )}
+
+              <div className="border-t border-outline-variant/20 pt-8 group-hover:border-primary/40 transition-colors duration-700">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 border border-outline-variant/20 flex items-center justify-center group-hover:border-primary/50 group-hover:bg-primary/5 transition-all duration-500">
+                    <span className="material-symbols-outlined text-xl text-on-surface-variant group-hover:text-primary transition-colors duration-500">
+                      {step.icon}
+                    </span>
+                  </div>
+                  <span className="geist text-[10px] tracking-[0.2em] text-outline-variant">{step.number}</span>
+                </div>
+
+                <h3 className="cormorant text-2xl md:text-3xl text-on-surface mb-4 group-hover:text-primary transition-colors duration-500">
+                  {step.title}
+                </h3>
+                <p className="manrope text-on-surface-variant font-light leading-relaxed text-sm">
+                  {step.description}
+                </p>
+              </div>
             </div>
           ))}
         </div>

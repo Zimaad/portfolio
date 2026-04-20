@@ -1,17 +1,29 @@
 import { useReveal } from '../hooks/useReveal';
 
-const experiences = [
+const services = [
   {
-    company: 'UrbanTech Services LLP',
-    role: 'Fullstack Developer Intern',
-    date: 'June 2025 — Present',
-    description: 'Built PREX, a procurement and quotation automation tool for enterprises, improving operational visibility with a React-based real-time order analytics dashboard.',
+    icon: 'devices',
+    title: 'Custom Web Applications',
+    description: 'Full-stack apps tailored to your business — from dashboards and marketplaces to SaaS platforms. Built with React, Next.js, and scalable backends.',
+    tech: ['React / Next.js', 'Node.js / Python', 'Firebase / MongoDB', 'REST & GraphQL APIs'],
   },
   {
-    company: 'TSB Enterprises',
-    role: 'Web Developer',
-    date: 'Dec 2025',
-    description: 'Developed a Django-based booking platform with Razorpay payments, QR code generation, and automated booking lifecycle management.',
+    icon: 'smart_toy',
+    title: 'AI-Powered Tools',
+    description: 'Chatbots, autonomous agents, data analysis tools, and AI integrations that give your business a genuine edge over the competition.',
+    tech: ['LangChain / LangGraph', 'OpenAI / Gemini', 'Custom AI Agents', 'Data Pipelines'],
+  },
+  {
+    icon: 'web',
+    title: 'Websites & Landing Pages',
+    description: 'Premium, high-converting websites that look stunning and rank on Google. SEO-optimized, mobile-first, and built to impress.',
+    tech: ['Responsive Design', 'SEO Optimization', 'Performance Tuning', 'Analytics Setup'],
+  },
+  {
+    icon: 'settings_suggest',
+    title: 'Automation & Integration',
+    description: 'Connect your tools, automate repetitive workflows, and streamline operations. Stop wasting hours on tasks a machine can do in seconds.',
+    tech: ['Workflow Automation', 'API Integrations', 'Payment Systems', 'Cloud Deployment'],
   },
 ];
 
@@ -19,30 +31,45 @@ export default function Experience() {
   const revealRef = useReveal();
 
   return (
-    <section id="experience" ref={revealRef} className="bg-surface-container-low py-40 px-10">
+    <section id="services" ref={revealRef} className="bg-surface-container-low py-40 px-6 md:px-10">
       <div className="max-w-screen-xl mx-auto">
-        <p className="geist text-[10px] tracking-[0.2em] text-primary mb-16 text-center">02 — JOURNEY</p>
-        <div className="space-y-32">
-          {experiences.map((exp, index) => (
-            <div 
-              key={index} 
-              className={`grid md:grid-cols-12 items-start group ${index !== 0 ? 'border-t border-outline-variant/10 pt-16' : ''}`}
+        <div className="mb-20 reveal">
+          <p className="geist text-[10px] tracking-[0.2em] text-primary mb-4">02 — SERVICES</p>
+          <h2 className="cormorant text-5xl md:text-6xl text-on-surface">What I Build</h2>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-x-12 gap-y-16">
+          {services.map((service, index) => (
+            <div
+              key={index}
+              className="group reveal border-t border-outline-variant/15 pt-8 hover:border-primary/40 transition-colors duration-700"
             >
-              <div className="md:col-span-2 geist text-[10px] text-on-surface-variant mt-2">
-                {exp.date}
+              <div className="flex items-start gap-5 mb-5">
+                <div className="w-12 h-12 border border-outline-variant/20 flex items-center justify-center group-hover:border-primary/50 group-hover:bg-primary/5 transition-all duration-500">
+                  <span className="material-symbols-outlined text-xl text-on-surface-variant group-hover:text-primary transition-colors duration-500">
+                    {service.icon}
+                  </span>
+                </div>
+                <div>
+                  <h3 className="cormorant text-2xl md:text-3xl text-on-surface group-hover:text-primary transition-colors duration-500">
+                    {service.title}
+                  </h3>
+                </div>
               </div>
-              <div className="md:col-span-6">
-                <h3 className="cormorant text-4xl mb-4 group-hover:text-primary transition-colors">
-                  {exp.role}
-                </h3>
-                <p className="manrope text-on-surface-variant max-w-md">
-                  {exp.description}
-                </p>
-              </div>
-              <div className="md:col-span-4 text-right hidden md:block">
-                <span className="geist text-[10px] tracking-[0.2em] text-outline-variant uppercase">
-                  {exp.company}
-                </span>
+
+              <p className="manrope text-on-surface-variant font-light leading-relaxed mb-6 max-w-md">
+                {service.description}
+              </p>
+
+              <div className="flex flex-wrap gap-2">
+                {service.tech.map((t) => (
+                  <span
+                    key={t}
+                    className="geist text-[8px] tracking-[0.15em] text-on-surface-variant/60 uppercase border border-outline-variant/15 px-3 py-1.5"
+                  >
+                    {t}
+                  </span>
+                ))}
               </div>
             </div>
           ))}

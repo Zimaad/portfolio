@@ -8,8 +8,8 @@ export default function Projects() {
         {/* Header row */}
         <div className="flex justify-between items-end mb-16">
           <div>
-            <p className="geist text-[10px] tracking-[0.2em] text-primary mb-4">03 — SELECTED WORK</p>
-            <h2 className="cormorant text-5xl md:text-6xl">Archives</h2>
+            <p className="geist text-[10px] tracking-[0.2em] text-primary mb-4">03 — CASE STUDIES</p>
+            <h2 className="cormorant text-5xl md:text-6xl">Selected Work</h2>
           </div>
           <a
             className="cormorant italic text-lg border-b border-primary hover:pb-2 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]"
@@ -21,20 +21,26 @@ export default function Projects() {
           </a>
         </div>
 
-        {/* 3-column grid — all projects side by side */}
+        {/* 3-column grid */}
         <div className="grid md:grid-cols-3 gap-x-8 gap-y-20">
           {projects.map((project, i) => (
             <div key={i} className="group relative">
-              {/* Clickable image — links to project detail page */}
+              {/* Clickable image */}
               <Link
                 to={`/project/${project.slug}`}
-                className="block aspect-[3/4] overflow-hidden bg-surface-container-low mb-6 cursor-pointer"
+                className="block aspect-[3/4] overflow-hidden bg-surface-container-low mb-6 cursor-pointer relative"
               >
                 <img
                   className="w-full h-full object-cover grayscale group-hover:scale-[1.03] group-hover:grayscale-0 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]"
                   src={project.image}
                   alt={project.title}
                 />
+                {/* Client type badge */}
+                {project.clientType && (
+                  <span className="absolute top-4 left-4 geist text-[8px] tracking-[0.2em] uppercase bg-black/60 backdrop-blur-sm text-white/80 px-3 py-1.5 border border-white/10">
+                    {project.clientType}
+                  </span>
+                )}
               </Link>
 
               <div className="flex justify-between items-start">
@@ -80,16 +86,16 @@ export default function Projects() {
                       </svg>
                     </a>
                   )}
-                  {!project.liveUrl && !project.githubUrl && (
-                    <span
-                      className="geist text-[8px] text-outline-variant tracking-[0.15em] uppercase"
-                      title="Private / internal project"
-                    >
-                      PRIVATE
-                    </span>
-                  )}
                 </div>
               </div>
+
+              {/* Results badge */}
+              {project.results && (
+                <p className="mt-3 geist text-[9px] text-primary/70 tracking-[0.1em] flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[12px]">trending_up</span>
+                  {project.results}
+                </p>
+              )}
             </div>
           ))}
         </div>

@@ -73,7 +73,6 @@ export default function Navbar() {
           element.scrollIntoView({ behavior: 'smooth' });
         }
       } else {
-        // Navigate to home then the hash will be handled by useEffect
         navigate('/' + href);
       }
       closeMenu();
@@ -81,11 +80,11 @@ export default function Navbar() {
   };
 
   const navItems = [
-    { label: 'PROJECTS', href: '#projects' },
-    { label: 'SKILLS', href: '#skills' },
-    { label: 'EXPERIENCE', href: '#experience' },
+    { label: 'SERVICES', href: '#services' },
+    { label: 'WORK', href: '#projects' },
+    { label: 'PROCESS', href: '#process' },
+    { label: 'FAQ', href: '#faq' },
     { label: 'CONTACT', href: '#contact' },
-    { label: 'RESUME', href: '/resume.pdf', external: true },
   ];
 
   return (
@@ -98,26 +97,14 @@ export default function Navbar() {
         
         <nav className="hidden md:flex gap-12">
           {navItems.map((item) => (
-            item.external ? (
-              <a 
-                key={item.label}
-                className="text-neutral-400 font-medium geist all-caps tracking-[0.2em] text-[10px] hover:text-neutral-50 transition-colors duration-300" 
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {item.label}
-              </a>
-            ) : (
-              <a 
-                key={item.label}
-                className="text-neutral-400 font-medium geist all-caps tracking-[0.2em] text-[10px] hover:text-neutral-50 transition-colors duration-300 cursor-pointer" 
-                href={item.href}
-                onClick={(e) => handleNavClick(e, item.href)}
-              >
-                {item.label}
-              </a>
-            )
+            <a 
+              key={item.label}
+              className="text-neutral-400 font-medium geist all-caps tracking-[0.2em] text-[10px] hover:text-neutral-50 transition-colors duration-300 cursor-pointer" 
+              href={item.href}
+              onClick={(e) => handleNavClick(e, item.href)}
+            >
+              {item.label}
+            </a>
           ))}
         </nav>
 
@@ -139,29 +126,17 @@ export default function Navbar() {
       >
         <nav className="flex flex-col items-center gap-8">
           {navItems.map((item) => (
-            item.external ? (
-              <a 
-                key={item.label}
-                className="mobile-link text-3xl font-bold cormorant text-neutral-50 tracking-tighter hover:text-neutral-400 transition-colors"
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {item.label}
-              </a>
-            ) : (
-              <a 
-                key={item.label}
-                onClick={(e) => {
-                  handleNavClick(e, item.href);
-                  closeMenu();
-                }}
-                className="mobile-link text-3xl font-bold cormorant text-neutral-50 tracking-tighter hover:text-neutral-400 transition-colors cursor-pointer"
-                href={item.href}
-              >
-                {item.label}
-              </a>
-            )
+            <a 
+              key={item.label}
+              onClick={(e) => {
+                handleNavClick(e, item.href);
+                closeMenu();
+              }}
+              className="mobile-link text-3xl font-bold cormorant text-neutral-50 tracking-tighter hover:text-neutral-400 transition-colors cursor-pointer"
+              href={item.href}
+            >
+              {item.label}
+            </a>
           ))}
         </nav>
       </div>
