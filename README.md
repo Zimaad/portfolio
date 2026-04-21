@@ -1,4 +1,4 @@
-# Zimaad's Portfolio
+# Zimaad's Portfolio : https://www.zimaad.in/
 
 A modern, responsive portfolio website built with React, TypeScript, and Tailwind CSS. Features smooth animations, mobile-first design, and a cool coding terminal.
 
