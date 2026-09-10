@@ -3,7 +3,7 @@ import { useState } from 'react';
 const faqs = [
   {
     question: 'How much does a project typically cost?',
-    answer: "Every project is different, so I provide custom quotes after our initial conversation. A landing page starts around $200, a full web application from $800, and AI-powered tools from $1,300 depending on complexity. I'm transparent about pricing from day one — no hidden fees, no surprises.",
+    answer: "Every project is different, so I provide custom quotes after our initial conversation. A landing page starts around $200, a full web application from $800, and AI-powered tools from $1,300 depending on complexity. I'm transparent about pricing from day one. No hidden fees, no surprises.",
   },
   {
     question: 'How long does it take to build?',
@@ -11,7 +11,7 @@ const faqs = [
   },
   {
     question: 'Do you work with international clients?',
-    answer: "Absolutely. I work with clients globally and am comfortable with async communication across time zones. Most of my communication happens over email, Slack, or scheduled video calls — whatever works best for you.",
+    answer: "Absolutely. I work with clients globally and am comfortable with async communication across time zones. Most of my communication happens over email, Slack, or scheduled video calls, whatever works best for you.",
   },
   {
     question: 'What happens after launch?',
@@ -19,11 +19,11 @@ const faqs = [
   },
   {
     question: 'Can you integrate AI into my existing product?',
-    answer: "Yes — that's one of my specialties. Whether it's adding a chatbot, automating workflows with AI agents, building recommendation systems, or integrating with OpenAI/Gemini APIs, I can plug AI capabilities into your existing tech stack without rebuilding everything.",
+    answer: "Yes, that's one of my specialties. Whether it's adding a chatbot, automating workflows with AI agents, building recommendation systems, or integrating with OpenAI/Gemini APIs, I can plug AI capabilities into your existing tech stack without rebuilding everything.",
   },
   {
     question: 'What if I only have a rough idea?',
-    answer: "That's perfectly fine. Many of my best projects started as rough ideas. During the discovery phase, I help you refine your concept, define the scope, and figure out the smartest way to build it. You don't need a detailed spec — just bring the vision.",
+    answer: "That's perfectly fine. Many of my best projects started as rough ideas. During the discovery phase, I help you refine your concept, define the scope, and figure out the smartest way to build it. You don't need a detailed spec, just bring the vision.",
   },
 ];
 
@@ -38,7 +38,7 @@ export default function FAQ() {
     <section id="faq" className="py-40 px-6 md:px-10 bg-surface-container-low">
       <div className="max-w-screen-xl mx-auto grid md:grid-cols-12 gap-16">
         <div className="md:col-span-4">
-          <p className="geist text-[10px] tracking-[0.2em] text-primary mb-4">06 — FAQ</p>
+          <p className="geist text-[10px] tracking-[0.2em] text-primary mb-4">05 / FAQ</p>
           <h2 className="cormorant text-5xl md:text-6xl text-on-surface">Common Questions</h2>
           <p className="manrope text-on-surface-variant font-light mt-6 leading-relaxed">
             Everything you need to know before we start working together.

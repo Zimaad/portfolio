@@ -8,7 +8,7 @@ export default function Projects() {
         {/* Header row */}
         <div className="flex justify-between items-end mb-16">
           <div>
-            <p className="geist text-[10px] tracking-[0.2em] text-primary mb-4">03 — CASE STUDIES</p>
+            <p className="geist text-[10px] tracking-[0.2em] text-primary mb-4">03 / CASE STUDIES</p>
             <h2 className="cormorant text-5xl md:text-6xl">Selected Work</h2>
           </div>
           <a

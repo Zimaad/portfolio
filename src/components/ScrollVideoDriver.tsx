@@ -23,7 +23,7 @@ export default function ScrollVideoDriver({ children, videoSrc, height = '425vh'
       className="relative"
       style={{ height }}
     >
-      {/* Sticky canvas background — renders pre-extracted video frames */}
+      {/* Sticky canvas background: renders pre-extracted video frames */}
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-white" style={{ zIndex: 0 }}>
         <canvas
           ref={canvasRef}
@@ -75,7 +75,7 @@ export default function ScrollVideoDriver({ children, videoSrc, height = '425vh'
         )}
       </div>
 
-      {/* Content sections — scroll on top of the sticky canvas */}
+      {/* Content sections: scroll on top of the sticky canvas */}
       <div
         className="relative w-full"
         style={{ marginTop: '-100vh', zIndex: 1 }}

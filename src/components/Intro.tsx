@@ -58,7 +58,7 @@ export default function Intro({ onComplete }: { onComplete: () => void }) {
     /* Hold for a moment so the user reads */
     tl.to({}, { duration: 0.6 });
 
-    /* ─── Phase 2: Exit — curtains split vertically ─── */
+    /* ─── Phase 2: Exit, curtains split vertically ─── */
     tl.to('.intro-line-inner', {
       y: '-110%',
       duration: 0.6,
@@ -147,7 +147,7 @@ export default function Intro({ onComplete }: { onComplete: () => void }) {
           zIndex: 2,
         }}
       >
-        {/* Name — large staggered reveal */}
+        {/* Name: large staggered reveal */}
         <h1
           className="cormorant"
           style={{
@@ -199,7 +199,7 @@ export default function Intro({ onComplete }: { onComplete: () => void }) {
             textAlign: 'center',
           }}
         >
-          Digital Studio — 2026
+          Digital Studio / 2026
         </p>
 
         {/* Role tags */}

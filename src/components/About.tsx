@@ -8,7 +8,7 @@ export default function About() {
       <div className="max-w-screen-xl mx-auto">
         <div className="grid md:grid-cols-12 gap-10 mb-24">
           <div className="md:col-span-8 reveal">
-            <p className="geist text-[10px] tracking-[0.2em] text-primary mb-8">01 — WHO I AM</p>
+            <p className="geist text-[10px] tracking-[0.2em] text-primary mb-8">01 / WHO I AM</p>
             <h2 className="cormorant text-5xl md:text-7xl leading-tight text-on-surface">
               I help startups and businesses launch{' '}
               <span className="italic text-outline">software that actually works.</span>
@@ -16,9 +16,25 @@ export default function About() {
           </div>
           <div className="md:col-span-4 flex items-end reveal">
             <p className="manrope text-on-surface-variant font-light leading-relaxed">
-              You have the idea — I bring it to life. From custom web apps and AI-powered tools to high-converting 
+              You have the idea. I bring it to life. From custom web apps and AI-powered tools to high-converting 
               landing pages, I handle the entire build so you can focus on growing your business. No fluff, no 
               missed deadlines, just clean code and products that perform.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-12 gap-10 mb-24 reveal">
+          <div className="md:col-span-4">
+            <p className="geist text-[10px] tracking-[0.2em] text-primary mb-4">CURRENTLY</p>
+          </div>
+          <div className="md:col-span-8 border-t border-outline-variant/20 pt-6">
+            <p className="cormorant text-3xl md:text-4xl text-on-surface leading-snug mb-4">
+              Co-Founder of <span className="italic text-outline">Zimx Solutions LLP</span>
+            </p>
+            <p className="manrope text-on-surface-variant font-light leading-relaxed max-w-xl">
+              Alongside my freelance work, I co-founded Zimx Solutions LLP, a software studio building 
+              custom web platforms and AI-driven products for businesses. Same standards, bigger team, 
+              more capacity to take on ambitious builds.
             </p>
           </div>
         </div>

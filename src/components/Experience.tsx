@@ -4,7 +4,7 @@ const services = [
   {
     icon: 'devices',
     title: 'Custom Web Applications',
-    description: 'Full-stack apps tailored to your business — from dashboards and marketplaces to SaaS platforms. Built with React, Next.js, and scalable backends.',
+    description: 'Full-stack apps tailored to your business, from dashboards and marketplaces to SaaS platforms. Built with React, Next.js, and scalable backends.',
     tech: ['React / Next.js', 'Node.js / Python', 'Firebase / MongoDB', 'REST & GraphQL APIs'],
   },
   {
@@ -34,7 +34,7 @@ export default function Experience() {
     <section id="services" ref={revealRef} className="bg-surface-container-low py-40 px-6 md:px-10">
       <div className="max-w-screen-xl mx-auto">
         <div className="mb-20 reveal">
-          <p className="geist text-[10px] tracking-[0.2em] text-primary mb-4">02 — SERVICES</p>
+          <p className="geist text-[10px] tracking-[0.2em] text-primary mb-4">02 / SERVICES</p>
           <h2 className="cormorant text-5xl md:text-6xl text-on-surface">What I Build</h2>
         </div>
 

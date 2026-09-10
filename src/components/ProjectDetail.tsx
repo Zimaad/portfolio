@@ -68,24 +68,24 @@ export default function ProjectDetail() {
             
             <div className="space-y-10">
               <div className="meta-item">
-                <p className="geist text-[9px] tracking-[0.2em] text-neutral-500 mb-2 uppercase">Scope —</p>
+                <p className="geist text-[9px] tracking-[0.2em] text-neutral-500 mb-2 uppercase">Scope</p>
                 <p className="geist text-sm text-neutral-200">{project.role || 'End-to-End Development'}</p>
               </div>
 
               {project.clientType && (
                 <div className="meta-item">
-                  <p className="geist text-[9px] tracking-[0.2em] text-neutral-500 mb-2 uppercase">Type —</p>
+                  <p className="geist text-[9px] tracking-[0.2em] text-neutral-500 mb-2 uppercase">Type</p>
                   <p className="geist text-sm text-neutral-200">{project.clientType}</p>
                 </div>
               )}
               
               <div className="meta-item">
-                <p className="geist text-[9px] tracking-[0.2em] text-neutral-500 mb-2 uppercase">Year —</p>
+                <p className="geist text-[9px] tracking-[0.2em] text-neutral-500 mb-2 uppercase">Year</p>
                 <p className="geist text-sm text-neutral-200">{project.year || '2024'}</p>
               </div>
 
               <div className="meta-item">
-                <p className="geist text-[9px] tracking-[0.2em] text-neutral-500 mb-2 uppercase">Tech Stack —</p>
+                <p className="geist text-[9px] tracking-[0.2em] text-neutral-500 mb-2 uppercase">Tech Stack</p>
                 <p className="geist text-sm text-neutral-200 leading-relaxed">{project.techStack}</p>
               </div>
 
@@ -126,7 +126,7 @@ export default function ProjectDetail() {
               {/* Results highlight */}
               {project.results && (
                 <div className="mb-12 p-6 border border-neutral-800 bg-neutral-900/50">
-                  <p className="geist text-[9px] tracking-[0.2em] text-neutral-500 mb-3 uppercase">Key Result —</p>
+                  <p className="geist text-[9px] tracking-[0.2em] text-neutral-500 mb-3 uppercase">Key Result</p>
                   <p className="manrope text-lg text-neutral-200 flex items-center gap-2">
                     <span className="material-symbols-outlined text-primary text-xl">trending_up</span>
                     {project.results}
@@ -162,7 +162,7 @@ export default function ProjectDetail() {
         <div className="max-w-screen-xl mx-auto px-6 md:px-10 flex justify-between items-center">
           <Link to="/" className="geist text-[9px] tracking-[0.3em] hover:text-primary transition-colors">ALL CASE STUDIES</Link>
           <div className="flex gap-10">
-            <span className="geist text-[9px] tracking-[0.3em] text-neutral-600 uppercase">Case Study — {project.year || '2024'}</span>
+            <span className="geist text-[9px] tracking-[0.3em] text-neutral-600 uppercase">Case Study / {project.year || '2024'}</span>
           </div>
         </div>
       </footer>

@@ -168,6 +168,10 @@ export default function Hero() {
       {firstFrameLoaded && (
         <div className="hero-content relative z-10 flex flex-col justify-end px-6 md:px-14 pb-24 md:pb-32" style={{ minHeight: '100dvh' }}>
           <div className="max-w-screen-xl mx-auto w-full">
+            <div className="hero-tagline flex items-center gap-3 mb-6">
+              <span className="w-6 h-[1px] bg-primary/60" />
+              <p className="geist text-[9px] md:text-[10px] tracking-[0.3em] text-white/60 uppercase">Co-Founder of Zimx Solutions LLP</p>
+            </div>
             <h1 className="cormorant text-white mb-6" style={{ fontSize: 'clamp(3.5rem, 11vw, 13rem)', lineHeight: '0.88', fontWeight: 300 }}>
               <span className="block overflow-hidden"><span className="hero-line block">Zimaad</span></span>
               <span className="block overflow-hidden"><span className="hero-line block italic text-on-surface-variant/50">Azhari</span></span>

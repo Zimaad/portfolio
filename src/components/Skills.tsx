@@ -3,7 +3,7 @@ const steps = [
     number: '01',
     icon: 'chat',
     title: 'Discovery',
-    description: "We talk about your idea, goals, and timeline. No jargon, no BS — just a clear conversation about what you need and how I can help.",
+    description: "We talk about your idea, goals, and timeline. No jargon, no BS, just a clear conversation about what you need and how I can help.",
   },
   {
     number: '02',
@@ -30,7 +30,7 @@ export default function Skills() {
     <section id="process" className="py-40 px-6 md:px-10 bg-surface-container-low">
       <div className="max-w-screen-xl mx-auto">
         <div className="mb-20">
-          <p className="geist text-[10px] tracking-[0.2em] text-primary mb-4">04 — PROCESS</p>
+          <p className="geist text-[10px] tracking-[0.2em] text-primary mb-4">04 / PROCESS</p>
           <h2 className="cormorant text-5xl md:text-6xl text-on-surface">How I Work</h2>
         </div>
 
